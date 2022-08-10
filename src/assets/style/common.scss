@@ -1,0 +1,288 @@
+@import "./transition.scss";
+@import "@/theme/index.scss";
+.el-notification .el-icon-warning{
+  color: #e6a23c;
+}
+.el-notification .el-icon-error{
+  color: #f56c6c;
+}
+.el-notification .el-icon-success{
+  color: #67c23a;
+}
+.el-notification .el-icon-info{
+  color: #409eff;
+}
+//布局
+.layout-container {
+  background-color: var(--system-container-main-background);
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  margin: 5px;;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  &-form {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 15px 0;
+    &-handle {
+      display: flex;
+      justify-content: flex-start;
+    }
+    &-search {
+      display: flex;
+      justify-content: flex-end;
+      .search-btn {
+        margin-left: 15px;
+      }
+    }
+    .el-form-item {
+      margin-bottom: 0;
+    }
+  }
+  &-table {
+    flex: 1;
+    height: 100%;
+    padding: 15px;
+    overflow: auto;
+  }
+}
+// 页面
+.full-body {
+  background-color: var(--system-container-main-background);
+  color: var(--system-page-color);
+  width: calc(100% - 20px);
+  height: calc(100% - 20px);
+  margin: 5px;
+  padding: 5px;
+  display: flex;
+  overflow-y: auto;
+}
+// 表格页面公共样式
+.table-body-tbs{
+  width: calc(100%);
+  height: calc(100% - 5px);
+  display: flex;
+  overflow-y: auto;
+  .table-body-top{
+    display: flex;
+    height: calc(100% - 40px);
+    .table-body-left{
+      background-color: var(--system-container-main-background);
+      width: calc(100% - var(--left-size));
+      height: calc(100%);
+      .table-content{
+        height: calc(100% - 50px);
+        margin: 5px 5px 5px 5px;
+        overflow-y: auto;
+        .el-table th{
+          background:var(--system-primary-color);
+          color: var(--system-primary-text-color);
+        }
+        .is-scrolling-left,.is-scrolling-middle,.is-scrolling-right{
+          &::-webkit-scrollbar {
+            display: none;
+            width: 6px;
+            height: 10px;
+            border-radius: 5px;
+          }
+          &::-webkit-scrollbar-thumb {
+            border-radius: 5px;
+            background: rgba(144, 147, 153, 0.3);
+          }
+          &:hover {
+            &::-webkit-scrollbar {
+              display: block;
+            }
+            &::-webkit-scrollbar-thumb {
+              border-radius: 5px;
+              background: rgba(144, 147, 153, 0.3);
+              &:hover {
+                background: rgba(144, 147, 153, 0.5);
+              }
+            }
+          }
+        }
+      }
+      .table-page{
+        height: 40px;
+        line-height: 40px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-start;
+        .el-pagination{
+          .btn-prev,.btn-next{
+            padding: 5px 5px 5px 10px;
+            background:var(--system-container-background);
+            color: var(--system-page-tip-color);
+          }
+          .el-pagination__sizes{
+            .el-select{
+              .el-input,.el-input--mini ,.el-input--suffix{
+                .el-input__inner{
+                  background:var(--system-container-background);
+                  color: var(--system-page-tip-color);
+                  border:0px;
+                }
+              }
+            }
+          }
+          .el-pager{
+            .active{
+              background: var(--system-primary-color);
+              color:  var(--system-primary-text-color);
+            }
+            li{
+              background:var(--system-container-background);
+              color: var(--system-page-tip-color);
+            }
+          }
+        }
+      }
+    }
+    .table-body-right{
+      margin-left: var(--margin-left);
+      background-color: var(--system-container-main-background);
+      width: calc(100% - var(--right-size));
+      height: calc(100%);
+      display: var(--is-show);
+      .right-select-header{
+        display: flex;
+        height: 40px;
+        line-height: 40px;
+      }
+      .right-select-body{
+        display: flex;
+        flex-direction: column;
+        padding: 5px;
+        width: calc(100% - 10px);
+        height: calc(100% - 55px);
+        overflow-y: auto;
+        &::-webkit-scrollbar {
+          display: none;
+          width: 6px;
+        }
+        &::-webkit-scrollbar-thumb {
+          border-radius: 10px;
+          background: rgba(144, 147, 153, 0.3);
+        }
+      }
+    }
+  }
+  .table-body-bottom{
+    margin-top: 5px;
+    background-color: var(--system-container-main-background);
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+  .el-dropdown-link{
+    font-size: 13px;
+    cursor:pointer;
+    color: var(--system-page-color);
+  }
+}
+//返回
+.el-page-header{
+  .el-page-header__title{
+    font-size: 13px;
+  }
+  .el-page-header__content{
+    color: var(--system-page-color);
+    font-size: 13px;
+    font-weight: bold;
+  }
+}
+//右下角固定
+.affix-group-btns {
+  display: block;
+  position: fixed;
+  bottom: 20px;
+  right: 25px;
+  z-index: 99;
+}
+//单选框
+.el-radio-group{
+  .el-radio{
+    .el-radio__label{
+      color: var(--system-page-color);
+    }
+  }
+}
+
+// 公共 盒子样式
+.flex-box {
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+}
+.flex {
+  display: flex;
+}
+.center {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+a {
+  text-decoration: none;
+}
+
+/** element-plus **/
+.el-icon{
+  text-align: center;
+}
+//标题 列 统一公共样式
+.header-title-common {
+  padding: 10px 0 20px 0;
+  font-size: 13px;
+  font-weight: bold;
+  text-align: left;
+  &::before {
+    content: "▍";
+    color: var(--system-page-color);
+  }
+}
+//滚动栏
+body{
+  &::-webkit-scrollbar {
+    display: none;
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(144, 147, 153, 0.3);
+  }
+}
+//页面滚动栏
+.system-scrollbar,.full-body,.table-content {
+  &::-webkit-scrollbar {
+    display: none;
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: rgba(144, 147, 153, 0.3);
+  }
+}
+//鼠标悬浮显示滚动条
+.system-scrollbar,.full-body,.table-content {
+  /*&:hover {
+    &::-webkit-scrollbar {
+      display: block;
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background: rgba(144, 147, 153, 0.3);
+      &:hover {
+        background: rgba(144, 147, 153, 0.5);
+      }
+    }
+  }*/
+}

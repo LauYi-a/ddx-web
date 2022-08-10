@@ -1,0 +1,35 @@
+{
+  "name": "init",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "vite --mode=development",
+    "uat": "vite --mode=production",
+    "build": "vite build --mode=production",
+    "build:stag": "vite build --mode=staging",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.0.4",
+    "@vueuse/core": "^4.10.0",
+    "axios": "^0.21.1",
+    "crypto-js": "^4.1.1",
+    "element-plus": "^1.0.2-beta.48",
+    "mockjs": "^1.1.0",
+    "normalize.css": "^8.0.1",
+    "nprogress": "^0.2.0",
+    "qs": "^6.10.3",
+    "throttle-debounce": "^3.0.1",
+    "vue": "^3.1.2",
+    "vue-router": "4",
+    "vuex": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^15.0.3",
+    "@vitejs/plugin-vue": "^1.2.2",
+    "@vue/compiler-sfc": "^3.0.5",
+    "sass": "^1.32.12",
+    "vite": "2.3.7",
+    "vite-plugin-mock": "2.8.0",
+    "vue-tsc": "^0.0.24"
+  }
+}
