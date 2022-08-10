@@ -61,15 +61,11 @@
    npm install
    ```
 
-   
-
 2. 运行
 
    ```
-   npm run dev 或 npm run start
+   npm run dev 或 npm run uat
    ```
-
-   
 
 3. 打包
 
