@@ -14,8 +14,6 @@
 ### 
 
 ## 简介
-
-- [更新日志](./VERSION.md)
 - ddx-web 创建于 2022 年 4 月 作者 YI.LAU 
 - 主要技术栈
    - MVVM框架：vue v3
@@ -25,8 +23,9 @@
    - 状态管理：vuex v4
    - 数据请求：axios
    - 实用工具库：@vueuse/core
+- [更新日志](./VERSION.md)
 
-## 简介
+## 介绍
 - ddx-web 是一个免费并且开源的中后台管理系统模板。使用最新版本的vue3+vite+element-plus开发而成，目的是为了解决通用型的业务中后台系统复杂的配置 极简的框架风格 支持 暗黑与亮色两种主题选择
 - ddx-web 包含前端后端分离框架 整套集成，点击查看[后端GitHub详情](https://github.com/LauYi-a/ddxs) 
 - 代码简洁 层次清晰 对部分共用代码进行了封装,适合中后台开发
@@ -83,10 +82,18 @@ ddx-web -- 主工程
 ```
 ## 预览效果
 
-![image](https://github.com/LauYi-a/ddx-wiki/blob/master/images/20220809-104925.jpg)
+![image](https://github.com/LauYi-a/ddx-wiki/blob/master/images/微信图片_20220812162735.png)
+![image](https://github.com/LauYi-a/ddx-wiki/blob/master/images/微信图片_20220812162817.png)
+![image](https://github.com/LauYi-a/ddx-wiki/blob/master/images/微信图片_20220812162854.png)
+![image](https://github.com/LauYi-a/ddx-wiki/blob/master/images/微信图片_20220812163127.png)
+![image](https://github.com/LauYi-a/ddx-wiki/blob/master/images/微信图片_20220812163253.png)
+![image](https://github.com/LauYi-a/ddx-wiki/blob/master/images/微信图片_20220812163259.png)
+#### 暗黑部分效果
+![image](https://github.com/LauYi-a/ddx-wiki/blob/master/images/微信图片_20220812163004.png)
+![image](https://github.com/LauYi-a/ddx-wiki/blob/master/images/微信图片_20220812163032.png)
+![image](https://github.com/LauYi-a/ddx-wiki/blob/master/images/微信图片_20220812163247.png)
 
-
-## 使用
+## 安装使用
    
 
 1. 安装依赖，国内推荐使用cnpm或tyarn，国外推荐使用npm或yarn
