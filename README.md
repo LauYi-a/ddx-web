@@ -9,13 +9,23 @@
     <a href="https://github.com/vitejs/vite">
         <img src="https://img.shields.io/badge/vite-2.2.3-brightgreen.svg" alt="vite">
     </a>
+     <a href="https://www.npmjs.com/package/vue">
+        <img src="https://img.shields.io/npm/v/vue.svg" alt="vite">
+    </a>
 </p>
-
-### 
-
+ 
 ## 简介
 - ddx-web 创建于 2022 年 4 月 作者 YI.LAU 
-- 主要技术栈
+- 此开源项目为个人开发，不限制任何商业使用和个人研究，使用之前请先点个Star对我进行鼓励
+- 利用此开源项目参与的一切违法、色情相关的活动均与本源码无关，请勿以身示法
+
+## 介绍
+- ddx-web 是一个免费并且开源的中后台管理系统模板。使用最新版本的vue3+vite+element-plus开发而成，目的是为了解决通用型的业务中后台系统复杂的配置 极简的框架风格 支持 暗黑与亮色两种主题选择
+- ddx-web 包含前端后端分离框架 整套集成，后端采用分布式微服务架构具体点击查看[后端GitHub源码详情](https://github.com/LauYi-a/ddxs) 
+- 代码简洁 层次清晰 对部分共用代码进行了封装,适合中后台开发
+- [更新日志](./VERSION.md)
+
+## 技术栈
    - MVVM框架：vue v3
    - 工程化管理：vite v2
    - UI框架：element-plus
@@ -23,16 +33,8 @@
    - 状态管理：vuex v4
    - 数据请求：axios
    - 实用工具库：@vueuse/core
-- [更新日志](./VERSION.md)
-
-## 介绍
-- ddx-web 是一个免费并且开源的中后台管理系统模板。使用最新版本的vue3+vite+element-plus开发而成，目的是为了解决通用型的业务中后台系统复杂的配置 极简的框架风格 支持 暗黑与亮色两种主题选择
-- ddx-web 包含前端后端分离框架 整套集成，点击查看[后端GitHub详情](https://github.com/LauYi-a/ddxs) 
-- 代码简洁 层次清晰 对部分共用代码进行了封装,适合中后台开发
-- 此开源项目为个人开发，不限制任何商业使用和个人研究，使用之前请先点个Star对我进行鼓励
-- 利用此开源项目参与的一切违法、色情相关的活动均与本源码无关，请勿以身示法
-
-##### 基础功能
+   
+## 基础功能
 - 已对axios及api管理机制的完善封装
 - 支持动态路由配置、状态管理机制（状态默认支持本地存储）、路由权限管理
 - 简易配置的页面缓存功能，只需菜单配置noCache属性，无需配置其他的任何属性，如组件名称，路由名称等等很多框架需要配置的东西
@@ -94,7 +96,6 @@ ddx-web -- 主工程
 ![image](https://github.com/LauYi-a/ddx-wiki/blob/master/images/微信图片_20220812163247.png)
 
 ## 安装使用
-   
 
 1. 安装依赖，国内推荐使用cnpm或tyarn，国外推荐使用npm或yarn
 
@@ -113,5 +114,9 @@ ddx-web -- 主工程
    ```
    npm run build
    ```
-   
+ 
+ ## 相关文档
+ ````
+ 后续补充
+ ````
 
