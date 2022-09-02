@@ -87,3 +87,23 @@ export function batchDeleteUserInfoByIdsApi(data) {
     data:data
   })
 }
+
+// 新增用户
+export function userAddApi(data) {
+  return request({
+    url: '/sys-user/add',
+    method: 'post',
+    baseURL: '/ddx/sys',
+    data:data
+  })
+}
+
+// 编辑用户
+export function userEditApi(data) {
+  return request({
+    url: '/sys-user/edit',
+    method: 'post',
+    baseURL: '/ddx/sys',
+    data:data
+  })
+}

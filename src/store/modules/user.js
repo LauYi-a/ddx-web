@@ -1,4 +1,5 @@
-import { getUserMenuApi, loginOutApi,loginApi,getUserInfoByIdApi,passwordChangeApi,updateByUserIdApi,selectUserListApi,deleteUserInfoByIdApi,batchDeleteUserInfoByIdsApi } from '@/api/sys/user'
+import { getUserMenuApi, loginOutApi,loginApi,getUserInfoByIdApi,passwordChangeApi,updateByUserIdApi,selectUserListApi,
+  deleteUserInfoByIdApi,batchDeleteUserInfoByIdsApi,userAddApi,userEditApi } from '@/api/sys/user'
 import { sendNotification } from '@/utils/system/toolUtils'
 import store from '@/store'
 
@@ -50,6 +51,7 @@ const actions = {
    * @param dispatch
    * @param params
    * @returns {Promise<any>} resolve 正常返回数据 reject 返回异常数据
+   * 如果调用者需要 finally 则需要返回  reject(error) 不然 finally 将会失效
    */
   login({ commit, dispatch }, params) {
     return new Promise((resolve, reject) => {
@@ -58,6 +60,7 @@ const actions = {
         resolve(res)
       }).catch(error =>{
         sendNotification(error.msg,error.type,3000);
+        reject(error)
       })
     })
   },
@@ -67,6 +70,7 @@ const actions = {
    * @param commit
    * @param params
    * @returns {Promise<any>} resolve 正常返回数据 reject 返回异常数据
+   * 如果调用者需要 finally 则需要返回  reject(error) 不然 finally 将会失效
    */
   getUserMenu({ commit }, params) {
     return new Promise((resolve, reject) => {
@@ -85,8 +89,8 @@ const actions = {
   /**
    * 根据用户id查询用户详细信息
    * @param commit
-   * @param params
-   * @returns {Promise<any>}
+   * @returns {Promise<any>} resolve 正常返回数据 reject 返回异常数据
+   * 如果调用者需要 finally 则需要返回  reject(error) 不然 finally 将会失效
    */
   getUserInfoById({ commit }) {
     let params = {
@@ -105,7 +109,8 @@ const actions = {
    * @param commit
    * @param dispatch
    * @param params
-   * @returns {Promise<any>}
+   * @returns {Promise<any>} resolve 正常返回数据 reject 返回异常数据
+   * 如果调用者需要 finally 则需要返回  reject(error) 不然 finally 将会失效
    */
   selectUserList({ commit, dispatch }, params) {
     return new Promise((resolve, reject) => {
@@ -113,6 +118,7 @@ const actions = {
         resolve(res)
       }).catch(error =>{
         sendNotification(error.msg,error.type,3000);
+        reject(error)
       })
     })
   },
@@ -121,7 +127,8 @@ const actions = {
    * @param commit
    * @param dispatch
    * @param params
-   * @returns {Promise<any>}
+   * @returns {Promise<any>} resolve 正常返回数据 reject 返回异常数据
+   * 如果调用者需要 finally 则需要返回  reject(error) 不然 finally 将会失效
    */
   passwordChange({ commit, dispatch }, params) {
     return new Promise((resolve, reject) => {
@@ -137,7 +144,8 @@ const actions = {
    * @param commit
    * @param dispatch
    * @param params
-   * @returns {Promise<any>}
+   * @returns {Promise<any>} resolve 正常返回数据 reject 返回异常数据
+   * 如果调用者需要 finally 则需要返回  reject(error) 不然 finally 将会失效
    */
   updateByUserId({ commit, dispatch }, params) {
     return new Promise((resolve, reject) => {
@@ -154,7 +162,8 @@ const actions = {
    * @param commit
    * @param dispatch
    * @param params
-   * @returns {Promise<any>}
+   * @returns {Promise<any>} resolve 正常返回数据 reject 返回异常数据
+   * 如果调用者需要 finally 则需要返回  reject(error) 不然 finally 将会失效
    */
   deleteUserInfoById({ commit, dispatch }, params) {
     return new Promise((resolve, reject) => {
@@ -171,7 +180,8 @@ const actions = {
    * @param commit
    * @param dispatch
    * @param params
-   * @returns {Promise<any>}
+   * @returns {Promise<any>} resolve 正常返回数据 reject 返回异常数据
+   * 如果调用者需要 finally 则需要返回  reject(error) 不然 finally 将会失效
    */
   batchDeleteUserInfoByIds({ commit, dispatch }, params) {
     return new Promise((resolve, reject) => {
@@ -179,6 +189,44 @@ const actions = {
         resolve(res)
       }).catch(error =>{
         sendNotification(error.msg,error.type,3000);
+        reject(error)
+      })
+    })
+  },
+
+  /**
+   * 新增用户
+   * @param commit
+   * @param dispatch
+   * @param params
+   * @returns {Promise<any>} resolve 正常返回数据 reject 返回异常数据
+   * 如果调用者需要 finally 则需要返回  reject(error) 不然 finally 将会失效
+   */
+  userAdd({ commit, dispatch }, params) {
+    return new Promise((resolve, reject) => {
+      userAddApi(params).then(res => {
+        resolve(res)
+      }).catch(error =>{
+        sendNotification(error.msg,error.type,3000);
+        reject(error)
+      })
+    })
+  },
+/**
+   * 编辑用户
+   * @param commit
+   * @param dispatch
+   * @param params
+   * @returns {Promise<any>} resolve 正常返回数据 reject 返回异常数据
+   * 如果调用者需要 finally 则需要返回  reject(error) 不然 finally 将会失效
+   */
+  userEdit({ commit, dispatch }, params) {
+    return new Promise((resolve, reject) => {
+      userEditApi(params).then(res => {
+        resolve(res)
+      }).catch(error =>{
+        sendNotification(error.msg,error.type,3000);
+        reject(error)
       })
     })
   },

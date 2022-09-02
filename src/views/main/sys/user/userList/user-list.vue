@@ -87,9 +87,9 @@
 </template>
 
 <script>
-import { defineComponent,ref, reactive,onMounted } from 'vue'
+import { defineComponent,ref, reactive,onMounted ,watch} from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRouter,onBeforeRouteUpdate } from 'vue-router'
 import { formatterDict} from '@/utils/sys/dictUtils'
 import { encrypt} from '@/utils/system/cryptoAES'
 import { arrayIdList,validationMultipleSelection,sendNotification} from '@/utils/system/toolUtils'
@@ -147,6 +147,12 @@ export default defineComponent({
         const serviceFormatter = (row) =>{
             return formatterDict(store.state.dict.sysDict.all.serviceModulesName,row.loginService)
         };
+        //监听路由变化刷新列表
+        watch(()=>router.currentRoute.value.query, (newValue) => {
+            if(newValue.isAddOrEdit){
+                selectDataList()
+            }
+        }, { immediate: true });
         // 组件挂载到页面之后执行
         onMounted(() => {
             selectDataList();
@@ -235,10 +241,14 @@ export default defineComponent({
          * 去编辑
          */
         const handleToEditChange = (row) =>{
-
+            localStorage.setItem(row.userId, encrypt(JSON.stringify(row)));
+            router.push({
+                path:'/sys/user/edit',
+                query:{userId:row.userId}
+            })
         };
         /**
-         * 查看详情
+         * 去查看详情
          */
         const handleToInfoChange = (row) =>{
             localStorage.setItem(row.userId, encrypt(JSON.stringify(row)));

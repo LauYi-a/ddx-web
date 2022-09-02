@@ -22,10 +22,11 @@ const actions = {
    * @param commit
    * @param params
    * @returns {Promise<any>} resolve 正常返回数据 reject 返回异常数据
+   * 如果调用者需要 finally 则需要返回  reject(error) 不然 finally 将会失效
    */
-  selectPageRoleList({ commit }, params) {
+  selectPageRoleList({ commit }) {
     return new Promise((resolve, reject) => {
-      selectPageRoleListApi(params).then(res => {
+      selectPageRoleListApi().then(res => {
         resolve(res)
       }).catch(error =>{
         sendNotification(error.msg,error.type,3000);
@@ -37,6 +38,7 @@ const actions = {
    * 查询所有角色键值
    * @param commit
    * @returns {Promise<any>} resolve 正常返回数据 reject 返回异常数据
+   * 如果调用者需要 finally 则需要返回  reject(error) 不然 finally 将会失效
    */
   selectRoleKyeAndValAll({ commit }) {
     return new Promise((resolve, reject) => {

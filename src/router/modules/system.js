@@ -52,6 +52,21 @@ const route = [
     ]
   },
   {
+    path: '/sys/user/edit',
+    name:'user-edit',
+    component: Layout,
+    redirect: '/sys/user/userEdit',
+    hideMenu: true,
+    meta: { title: '编辑用户' },
+    children: [
+      {
+        path: '/sys/user/userEdit',
+        component: createNameComponent(() => import('@/views/main/sys/user/userOper/user-edit.vue')),
+        meta: { title: '编辑用户信息', hideTabs: true }
+      }
+    ]
+  },
+  {
     path: '/system',
     component: Layout,
     redirect: '/404',
