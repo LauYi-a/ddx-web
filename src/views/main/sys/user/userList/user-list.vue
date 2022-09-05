@@ -79,8 +79,8 @@
                         <el-button title="批量删除用户" type="primary" :loading="form.isBatchDeleteLoad" v-has="'batch_delete'">批量删除</el-button>
                     </template>
                 </el-popconfirm>
-                <el-button title="关闭搜索栏" @click="close(true)" v-if="!iconIsShow"><el-icon><Expand /></el-icon></el-button>
-                <el-button title="打开搜索栏" @click="open(false)" v-if="iconIsShow"><el-icon><Fold /></el-icon></el-button>
+                <img :src="closeImages" title="关闭搜索栏" @click="close(true)" v-if="!iconIsShow" style="width: 30px;height: 30px;cursor: pointer; margin-left: 8px"/>
+                <img :src="openImages" title="打开搜索栏" @click="open(false)" v-if="iconIsShow" style="width: 30px;height: 30px;cursor: pointer; margin-left: 8px"/>
             </div>
         </div>
     </div>
@@ -89,9 +89,11 @@
 <script>
 import { defineComponent,ref, reactive,onMounted ,watch} from 'vue'
 import { useStore } from 'vuex'
-import { useRouter,onBeforeRouteUpdate } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { formatterDict} from '@/utils/sys/dictUtils'
 import { encrypt} from '@/utils/system/cryptoAES'
+import closeImages from "@/assets/images/colseSearch.png"
+import openImages from "@/assets/images/openSearch.png"
 import { arrayIdList,validationMultipleSelection,sendNotification} from '@/utils/system/toolUtils'
 export default defineComponent({
     setup() {
@@ -260,6 +262,8 @@ export default defineComponent({
         return {
             form,
             iconIsShow,
+            closeImages,
+            openImages,
             open,
             close,
             genderFormatter,

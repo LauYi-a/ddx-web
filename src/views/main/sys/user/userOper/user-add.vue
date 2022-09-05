@@ -65,7 +65,9 @@
             </el-tabs>
         </div>
         <div class="affix-group-btns">
-            <el-button title="保存用户信息" type="primary" @click="submit" :loading="form.isLoad" circle ><el-icon><Finished /></el-icon></el-button>
+            <transition name="el-fade-in-linear">
+                <img :src="ok" title="保存用户信息" style="width: 40px;height: 40px;cursor: pointer" @click="submit" v-show="form.isLoad"/>
+            </transition>
         </div>
     </div>
 </template>
@@ -76,6 +78,7 @@ import { useStore } from 'vuex'
 import { useRouter,onBeforeRouteLeave } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
 import { sendNotification } from '@/utils/system/toolUtils'
+import ok from "@/assets/images/add.png"
 export default defineComponent({
     setup() {
         const ruleForm = ref(null);
@@ -92,7 +95,7 @@ export default defineComponent({
                 resourceIds:[]
             },
             genders: store.state.dict.sysDict.sys.userGender,
-            isLoad:false,
+            isLoad:true,
             roleList:[],
             isSave:false,
             isBack:false,
@@ -155,20 +158,20 @@ export default defineComponent({
          * 提交保存
          */
         function submit() {
-            if(form.userInfo.resourceIds.length === 0){
-                sendNotification('请选择菜单后进行保存','warning',3000);
-                return false;
-            }
             if (ruleForm.value) {
                 ruleForm.value.validate((valid) => {
                     if (valid) {
-                        form.isLoad = true;
+                        if(form.userInfo.resourceIds.length === 0){
+                            sendNotification('请选择菜单后进行保存','warning',3000);
+                            return false;
+                        }
+                        form.isLoad = false;
                         store.dispatch('user/userAdd',form.userInfo).then(res => {
                             sendNotification(res.msg,res.type,3000);
                             form.isSave = true;
                             router.back();
                         }).finally(()=>{
-                            form.isLoad = false;
+                            form.isLoad = true;
                         })
                     }else {
                         return false;
@@ -199,6 +202,7 @@ export default defineComponent({
             selectMenuTree();
         });
         return {
+            ok,
             form,
             ruleForm,
             submit,

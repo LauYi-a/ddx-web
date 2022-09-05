@@ -65,7 +65,7 @@ export default defineComponent({
   setup() {
       const store = useStore();
       let drawer = ref(false);
-      let isShowDesc = ref(false);
+      let isShowDesc = ref(true);
       const ruleForm = ref(null);
       const form = reactive({
          paramConfig:{

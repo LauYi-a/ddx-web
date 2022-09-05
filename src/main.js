@@ -6,6 +6,7 @@ import 'normalize.css' // css初始化
 import './assets/style/common.scss' // 公共css
 import { ElNotification } from 'element-plus'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+import { ElCollapseTransition } from 'element-plus'
 import App from './App.vue'
 import store from './store'
 import router from './router'
@@ -19,4 +20,5 @@ app.use(store)
 app.use(ElNotification)
 app.use(router)
 app.use(has)
+app.use(ElCollapseTransition)
 app.mount('#app')
