@@ -24,12 +24,13 @@ const actions = {
    * @returns {Promise<any>} resolve 正常返回数据 reject 返回异常数据
    * 如果调用者需要 finally 则需要返回  reject(error) 不然 finally 将会失效
    */
-  selectPageRoleList({ commit }) {
+  selectPageRoleList({ commit, dispatch }, params) {
     return new Promise((resolve, reject) => {
-      selectPageRoleListApi().then(res => {
+      selectPageRoleListApi(params).then(res => {
         resolve(res)
       }).catch(error =>{
         sendNotification(error.msg,error.type,3000);
+        reject(error)
       })
     })
   },

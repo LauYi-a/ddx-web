@@ -66,18 +66,26 @@
             <div class="header-title-common">菜单资源信息</div>
             <el-tabs v-model="form.activeTabName" class="demo-tabs" tab-position="left" @tab-click="handleTabsClick">
                 <el-tab-pane v-for="item in form.resourceList" :label="item.serviceName" :name="item.serviceCode">
-                    <el-tree
-                            :data="item.treeMenuVo"
-                            show-checkbox
-                            node-key="id"
-                            :default-checked-keys="form.userInfo.resourceIds"
-                            @check="tabsTreeCurrentChecked"
-                    ></el-tree>
+                    <div class="tab-tree-body">
+                        <el-tree
+                                :data="item.treeMenuVo"
+                                show-checkbox
+                                node-key="id"
+                                :expand-on-click-node="false"
+                                :check-on-click-node="true"
+                                :default-checked-keys="form.userInfo.resourceIds"
+                                check-strictly="true"
+                                default-expand-all="true"
+                                @check="tabsTreeCurrentChecked"
+                        ></el-tree>
+                    </div>
                 </el-tab-pane>
             </el-tabs>
         </div>
         <div class="affix-group-btns">
-            <el-button title="保存用户信息" type="primary" @click="submit" :loading="form.isLoad" circle ><el-icon><Finished /></el-icon></el-button>
+            <transition name="el-fade-in-linear">
+                <img :src="ok" title="保存用户信息" style="width: 40px;height: 40px;cursor: pointer" @click="submit" v-show="form.isLoad"/>
+            </transition>
         </div>
     </div>
 </template>
@@ -89,6 +97,7 @@ import { useRouter,useRoute,onBeforeRouteLeave } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
 import { sendNotification } from '@/utils/system/toolUtils'
 import { decrypt} from '@/utils/system/cryptoAES'
+import ok from "@/assets/images/ok.ico"
 export default defineComponent({
     setup() {
         const ruleForm = ref(null);
@@ -111,7 +120,7 @@ export default defineComponent({
             services: store.state.dict.sysDict.all.serviceModulesName,
             genders: store.state.dict.sysDict.sys.userGender,
             userStatus: store.state.dict.sysDict.sys.userStatus,
-            isLoad:false,
+            isLoad:true,
             roleList:[],
             isSave:false,
             isBack:false,
@@ -175,20 +184,20 @@ export default defineComponent({
          * 提交保存
          */
         function submit() {
-            if(form.userInfo.resourceIds.length === 0){
-                sendNotification('请选择菜单后进行保存','warning',3000);
-                return false;
-            }
             if (ruleForm.value) {
                 ruleForm.value.validate((valid) => {
                     if (valid) {
-                        form.isLoad = true;
+                        if(form.userInfo.resourceIds.length === 0){
+                            sendNotification('请选择菜单后进行保存','warning',3000);
+                            return false;
+                        }
+                        form.isLoad = false;
                         store.dispatch('user/userEdit',form.userInfo).then(res => {
                             sendNotification(res.msg,res.type,3000);
                             form.isSave = true;
                             router.back();
                         }).finally(()=>{
-                            form.isLoad = false;
+                            form.isLoad = true;
                         })
                     }else {
                         return false;
@@ -242,10 +251,11 @@ export default defineComponent({
             selectMenuTree();
         });
         //组件卸载之前执行的函数
-       /* onUnmounted(() => {
+        onUnmounted(() => {
             localStorage.removeItem(initUserInfo.userId)
-        });*/
+        });
         return {
+            ok,
             form,
             ruleForm,
             submit,
@@ -291,8 +301,21 @@ export default defineComponent({
         min-height: 150px;
         overflow-y: auto;
         .demo-tabs{
-            height:  calc(100% - 65px);
+            height:  calc(100% - 60px);
             overflow-y: auto;
+            .tab-tree-body{
+                height: 360px;
+                min-height: 50px;
+                overflow-y: auto;
+                &::-webkit-scrollbar {
+                    display: none;
+                    width: 6px;
+                }
+                &::-webkit-scrollbar-thumb {
+                    border-radius: 10px;
+                    background: rgba(144, 147, 153, 0.3);
+                }
+            }
         }
     }
     .operation-top,.operation-bottom,.demo-tabs{

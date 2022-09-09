@@ -10,8 +10,12 @@
                                   element-loading-text="正在加载数据..."
                                   @selection-change="handleSelectionChange"
                                   table-layout="auto" style="width: 100%" max-height="580">
-                                  <el-table-column type="selection" width="55" />
-                            <el-table-column prop="xxx" label="字段名"/>
+                            <el-table-column type="selection" width="55" />
+                            <el-table-column prop="name" label="角色名称"/>
+                            <el-table-column prop="code" label="角色编号"/>
+                            <el-table-column prop="status" label="角色状态" :formatter="formatter"/>
+                            <el-table-column prop="createTime" label="创建时间"/>
+                            <el-table-column prop="updateTime" label="修改时间"/>
                             <el-table-column label="操作" fixed="right" width="80" >
                                 <template #default="scope">
                                     <el-dropdown trigger="click">
@@ -48,7 +52,12 @@
                     </div>
                     <div class="right-select-body">
                         <el-form label-position="top" label-width="100px" :modal="form.query" @keyup.enter.native="handleSelectChange">
-
+                            <el-form-item label="角色名称">
+                                <el-input v-model="form.query.name" size="mini" placeholder="请输入角色名称"  clearable />
+                            </el-form-item>
+                            <el-form-item label="角色编号">
+                                <el-input v-model="form.query.code" size="mini" placeholder="请输入角色编号"  clearable />
+                            </el-form-item>
                         </el-form>
                     </div>
                 </div>
@@ -60,8 +69,8 @@
                         <el-button title="批量删除" type="primary" :loading="form.isBatchDeleteLoad" v-has="'batch_delete'">批量删除</el-button>
                     </template>
                 </el-popconfirm>
-                <img :src="closeImages" title="关闭搜索栏" @click="close(true)" v-if="!iconIsShow" style="width: 30px;height: 30px;cursor: pointer; margin-left: 5px"/>
-                <img :src="openImages" title="打开搜索栏" @click="open(false)" v-if="iconIsShow" style="width: 30px;height: 30px;cursor: pointer; margin-left: 5px"/>
+                <img :src="closeImages" title="关闭搜索栏" @click="close(true)" v-if="!iconIsShow" style="width: 30px;height: 30px;cursor: pointer; margin-left: 5px" class="animate__animated animate__bounceIn"/>
+                <img :src="openImages" title="打开搜索栏" @click="open(false)" v-if="iconIsShow" style="width: 30px;height: 30px;cursor: pointer; margin-left: 5px" class="animate__animated animate__bounceIn"/>
             </div>
         </div>
     </div>
@@ -91,7 +100,10 @@ export default defineComponent({
             total:0,
             query:{
                 page:1,
-                perPage:10
+                perPage:10,
+                name:'',
+                code:'',
+                status:''
             },
             multipleSelection:[],
             tableData:[]
@@ -114,17 +126,17 @@ export default defineComponent({
         };
         //表格格式化
         const formatter = (row) =>{
-            return formatterDict(store.state.dict.xxx,row.xxx)
+            return formatterDict(store.state.dict.sysDict.sys.roleStatus,row.status)
         };
         // 组件挂载到页面之后执行
         onMounted(() => {
-            //selectDataList();
+            selectDataList();
         });
         /**
          * 列表数据查询
          */
         const selectDataList = () => {
-            store.dispatch('xxxxx/xxxx',form.query).then(res =>{
+            store.dispatch('role/selectPageRoleList',form.query).then(res =>{
                 form.tableData = res.data.resultData;
                 form.query.page = res.data.currentPage;
                 form.total = res.data.totalCount;
@@ -177,7 +189,7 @@ export default defineComponent({
         const handleBatchDeleteChange = () =>{
             form.isBatchDeleteLoad = validationMultipleSelection(form.multipleSelection);
             if (form.isBatchDeleteLoad) {
-                store.dispatch('xxxxx/xxxx',{keyWords:form.multipleSelection}).then(res =>{
+                store.dispatch('role/batch-delete',{keyWords:form.multipleSelection}).then(res =>{
                     sendNotification(res.msg,res.type,3000);
                     selectDataList();
                 }).finally(()=>{
@@ -189,12 +201,13 @@ export default defineComponent({
          * 删除
          */
         const handleDeleteChange = (id) =>{
-            store.dispatch('xxxxx/xxxx',{keyWord:id}).then(res =>{
+            store.dispatch('role/delete',{keyWord:id}).then(res =>{
                 sendNotification(res.msg,res.type,3000);
                 selectDataList();
             })
         };
-         /**
+
+        /**
          * 去查看详情
          */
         const handleToInfoChange = (row) =>{
@@ -220,6 +233,7 @@ export default defineComponent({
             openImages,
             open,
             close,
+            formatter,
             handleSelectChange,
             handleSelectionChange,
             handleSizeChange,

@@ -55,12 +55,18 @@
             <div class="header-title-common">菜单资源信息</div>
             <el-tabs v-model="form.activeTabName" class="demo-tabs" tab-position="left" @tab-click="handleTabsClick">
                 <el-tab-pane v-for="item in form.resourceList" :label="item.serviceName" :name="item.serviceCode">
-                    <el-tree
-                            :data="item.treeMenuVo"
-                            show-checkbox
-                            node-key="id"
-                            @check="tabsTreeCurrentChecked"
-                    ></el-tree>
+                    <div class="tab-tree-body">
+                        <el-tree
+                                :data="item.treeMenuVo"
+                                show-checkbox
+                                node-key="id"
+                                :expand-on-click-node="false"
+                                :check-on-click-node="true"
+                                check-strictly="true"
+                                default-expand-all="true"
+                                @check="tabsTreeCurrentChecked"
+                        ></el-tree>
+                    </div>
                 </el-tab-pane>
             </el-tabs>
         </div>
@@ -248,6 +254,18 @@ export default defineComponent({
         .demo-tabs{
             height:  calc(100% - 55px);
             overflow-y: auto;
+            .tab-tree-body{
+                height: 400px;
+                overflow-y: auto;
+                &::-webkit-scrollbar {
+                    display: none;
+                    width: 6px;
+                }
+                &::-webkit-scrollbar-thumb {
+                    border-radius: 10px;
+                    background: rgba(144, 147, 153, 0.3);
+                }
+            }
         }
     }
     .operation-top,.operation-bottom,.demo-tabs{

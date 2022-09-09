@@ -49,7 +49,7 @@
                         ></el-pagination>
                     </div>
                 </div>
-                <div class="table-body-right" v-bind:style="{ '--margin-left' : form.marginLeft,'--right-size' : form.rightSize,'--is-show' : form.display }">
+                <div class="table-body-right animate__animated animate__headShake" v-bind:style="{ '--margin-left' : form.marginLeft,'--right-size' : form.rightSize,'--is-show' : form.display }">
                     <div class="right-select-header center">
                         <el-button type="primary" :loading="form.isSelectLoad" @click="handleSelectChange">查询</el-button>
                         <el-button  :loading="form.isClearLoad"  @click="handleClearChange" >重置</el-button>
@@ -79,8 +79,8 @@
                         <el-button title="批量删除用户" type="primary" :loading="form.isBatchDeleteLoad" v-has="'batch_delete'">批量删除</el-button>
                     </template>
                 </el-popconfirm>
-                <img :src="closeImages" title="关闭搜索栏" @click="close(true)" v-if="!iconIsShow" style="width: 30px;height: 30px;cursor: pointer; margin-left: 8px"/>
-                <img :src="openImages" title="打开搜索栏" @click="open(false)" v-if="iconIsShow" style="width: 30px;height: 30px;cursor: pointer; margin-left: 8px"/>
+                <img :src="closeImages" title="关闭搜索栏" @click="close(true)" v-if="!iconIsShow" style="width: 30px;height: 30px;cursor: pointer; margin-left: 8px" class="animate__animated animate__bounceIn"/>
+                <img :src="openImages" title="打开搜索栏" @click="open(false)" v-if="iconIsShow" style="width: 30px;height: 30px;cursor: pointer; margin-left: 8px" class="animate__animated animate__bounceIn"/>
             </div>
         </div>
     </div>
