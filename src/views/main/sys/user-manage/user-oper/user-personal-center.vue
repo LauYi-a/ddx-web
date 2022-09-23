@@ -134,7 +134,7 @@
                             </template>
                         </el-input>
                     </template>
-                    <el-descriptions-item label-class-name="premission-label">
+                    <el-descriptions-item label-class-name="permission-label">
                         <template #label>
                             <div class="cell-item">
                                 <el-icon><SetUp /></el-icon>&nbsp;所拥有的菜单
@@ -159,31 +159,40 @@
                 </el-descriptions>
             </div>
             <div class="bottom-box">
-                <el-descriptions  class="margin-top" title="我的接口权限" :column="1" size="small"  border  >
+                <el-descriptions  class="margin-top" title="我的校色权限" :column="1" size="small"  border  >
                     <template #extra>
-                        <el-input v-model="form.premissionKey" type="text" placeholder="请输入接口权限关键字"  clearable @clear="selectPremissionKey"   @keyup.enter.native="selectPremissionKey">
-                            <template #append>
-                                <div class="cell-item" @click="selectPremissionKey">
-                                    <el-icon><Search /></el-icon>
-                                </div>
-                            </template>
-                        </el-input>
+                        <el-row :gutter="10">
+                            <el-col :span="12">
+                                <el-select v-model="form.query.serviceKey" placeholder="选择服务模块" size="mini" style="width: 100%;">
+                                    <el-option v-for="item in form.serviceModulesName" :key="item.key"  :label="item.value" :value="item.key"  />
+                                </el-select>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-input v-model="form.query.permissionKey" type="text" placeholder="请输入权限关键字"  clearable @clear="selectPermissionKey" @keyup.enter.native="selectPermissionKey">
+                                    <template #append>
+                                        <div class="cell-item" @click="selectPermissionKey">
+                                            <el-icon><Search /></el-icon>
+                                        </div>
+                                    </template>
+                                </el-input>
+                            </el-col>
+                        </el-row>
                     </template>
-                    <el-descriptions-item label-class-name="premission-label">
+                    <el-descriptions-item label-class-name="permission-label">
                         <template #label>
                             <div class="cell-item">
-                                <el-icon><Link /></el-icon>&nbsp;所拥有的接口
+                                <el-icon><Link /></el-icon>&nbsp;所拥有的权限
                             </div>
                         </template>
                         <div class="user-div-row">
-                             <span v-for="(premission, id) in form.rolePremission" :key="id" class="user-el-tag">
+                             <span v-for="(permission, id) in form.rolePermission" :key="id" class="user-el-tag">
                                  <el-tag size="small" style="margin-bottom: 5px;margin-right: 5px" >
-                                     <span  v-for="(item, key) in form.serviceModulesName" :key="key"> {{item.key===premission.serviceModule? item.value:''}} </span>
-                                     {{' | '+premission.name+'：'+premission.url}}
+                                     <span  v-for="(item, key) in form.serviceModulesName" :key="key"> {{item.key===permission.serviceModule? item.value:''}} </span>
+                                     {{' | '+permission.name+'：'+permission.url}}
                                  </el-tag>
                             </span>
                             <div class="menu-empty-block-des">
-                                <span v-if="form.rolePremission.length === 0">选择角色显示</span>
+                                <span v-if="form.rolePermission.length === 0">选择角色显示</span>
                             </div>
                         </div>
                     </el-descriptions-item>
@@ -221,10 +230,13 @@ export default defineComponent({
                 },
                 roleList:[]
             },
-            rolePremission_copy:[],
-            rolePremission:[],
+            rolePermission_copy:[],
+            rolePermission:[],
             radioRole:'',
-            premissionKey:'',
+            query:{
+                permissionKey:'',
+                serviceKey:store.state.dict.sysDict.all.serviceModulesName[0].key
+            },
             userGender:[],
             userStatus:[],
             serviceModulesName:[],
@@ -260,22 +272,33 @@ export default defineComponent({
         };
         //点击角色
         const clickRole = (e) => {
-            form.rolePremission = [];
-            form.rolePremission_copy = [];
-            if (e.rolePremission){
-                form.rolePremission = e.rolePremission;
-                form.rolePremission_copy = e.rolePremission
+            form.rolePermission = [];
+            form.rolePermission_copy = [];
+            if (e.rolePermission){
+                form.rolePermission = e.rolePermission;
+                form.rolePermission_copy = e.rolePermission
             }
         };
         //通过接口权限key搜索
-        const selectPremissionKey = () => {
-            if(form.rolePremission_copy.length>0){
-                form.rolePremission = [];
-                form.rolePremission_copy.filter(function (item) {
-                    if (item.name.indexOf(form.premissionKey) !=-1 || item.url.indexOf(form.premissionKey) !=-1  || item.serviceModule.indexOf(form.premissionKey) !=-1) {
-                        form.rolePremission.push(item)
+        const selectPermissionKey = () => {
+            if(form.rolePermission_copy.length>0){
+                form.rolePermission = [];
+                let rolePermission_temp = [];
+                form.rolePermission_copy.filter(function (item) {
+                    if (item.serviceModule.indexOf(form.query.serviceKey) !=-1) {
+                        rolePermission_temp.push(item)
                     }
-                })
+                });
+                if (form.query.permissionKey !== ""){
+                    rolePermission_temp.filter(function (item) {
+                        if (item.name.indexOf(form.query.permissionKey) !=-1 ||
+                            item.url.indexOf(form.query.permissionKey) !=-1) {
+                            form.rolePermission.push(item)
+                        }
+                    })
+                }else{
+                    form.rolePermission = rolePermission_temp;
+                }
             }else{
                 sendNotification('请点击选择角色后在进行搜索','warning',3000);
             }
@@ -351,7 +374,7 @@ export default defineComponent({
         loadDictKeyValue();
         return {
             form,
-            selectPremissionKey,
+            selectPermissionKey,
             selectMenuKeyKey,
             saveUserInfo,
             toUserInfo,
@@ -421,7 +444,7 @@ export default defineComponent({
                 }
             }
         }
-        .premission-label{
+        .permission-label{
             width: 130px;
         }
     }

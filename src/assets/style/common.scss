@@ -185,8 +185,13 @@
     color: var(--system-page-color);
   }
 }
+//表格更多操作图标按钮
+.more-operation-icon{
+  cursor: pointer;
+}
 //返回
 .el-page-header{
+  color: var(--system-page-color);
   .el-page-header__title{
     font-size: 13px;
   }
@@ -196,6 +201,12 @@
     font-weight: bold;
   }
 }
+//页返回按钮右边显示
+.pager-header-right{
+  display: flex;
+  justify-content: space-between;
+}
+
 //右下角固定
 .affix-group-btns {
   display: block;
@@ -241,9 +252,18 @@ a {
 //标题 列 统一公共样式
 .header-title-common {
   padding: 10px 0 20px 0;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: bold;
   text-align: left;
+  &::before {
+    content: "▍";
+    color: var(--system-page-color);
+  }
+}
+.desc-extra-title{
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--system-page-color);
   &::before {
     content: "▍";
     color: var(--system-page-color);

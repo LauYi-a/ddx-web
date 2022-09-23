@@ -75,6 +75,10 @@
        color: var(--system-primary-text-color) !important;
      }
   }
+  //表格更多操作图标按钮
+  .more-operation-icon{
+    color: var(--system-page-color);
+  }
   //输入框样式
   .el-input{
     .el-input__inner{

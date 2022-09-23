@@ -15,7 +15,7 @@
                             <el-table-column label="操作" fixed="right" width="80" >
                                 <template #default="scope">
                                     <el-dropdown trigger="click">
-                                        <span class="el-dropdown-link">操 作<el-icon class="el-icon--right"><arrow-down /></el-icon> </span>
+                                        <el-icon class="more-operation-icon"><MoreFilled /></el-icon>
                                         <template #dropdown>
                                             <el-dropdown-menu>
                                                 <el-dropdown-item @click="handleToInfoChange" v-has="'info'"><el-icon><View /></el-icon> 详 情</el-dropdown-item>
@@ -70,6 +70,8 @@
 <script>
 import { defineComponent,ref, reactive,onMounted } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import { encrypt} from '@/utils/system/cryptoAES'
 import { formatterDict} from '@/utils/sys/dictUtils'
 import { arrayIdList,validationMultipleSelection} from '@/utils/system/toolUtils'
 import closeImages from "@/assets/images/colseSearch.png"
@@ -78,6 +80,7 @@ export default defineComponent({
     name: 'user-info',
     setup() {
         const store = useStore();
+        const router = useRouter();
         const iconIsShow = ref(false);
         const form = reactive({
             leftSize:'15%',
@@ -229,7 +232,8 @@ export default defineComponent({
             handleClearChange,
             handleToAddChange,
             handleToEditChange,
-            handleToInfoChange
+            handleToInfoChange,
+            handleMoreOperationChange
         }
     }
 })

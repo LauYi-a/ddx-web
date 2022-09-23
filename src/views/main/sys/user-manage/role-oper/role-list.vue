@@ -19,11 +19,11 @@
                             <el-table-column label="操作" fixed="right" width="80" >
                                 <template #default="scope">
                                     <el-dropdown trigger="click">
-                                        <span class="el-dropdown-link">操 作<el-icon class="el-icon--right"><arrow-down /></el-icon> </span>
+                                        <el-icon class="more-operation-icon"><MoreFilled /></el-icon>
                                         <template #dropdown>
                                             <el-dropdown-menu>
-                                                <el-dropdown-item @click="handleToInfoChange" v-has="'info'"><el-icon><View /></el-icon> 详 情</el-dropdown-item>
-                                                <el-dropdown-item @click="handleToEditChange" v-has="'edit'"><el-icon><Edit /></el-icon> 编 辑</el-dropdown-item>
+                                                <el-dropdown-item @click="handleToInfoChange(scope.row)" v-has="'info'"><el-icon><View /></el-icon> 详 情</el-dropdown-item>
+                                                <el-dropdown-item @click="handleToEditChange(scope.row)" v-has="'edit'"><el-icon><Edit /></el-icon> 编 辑</el-dropdown-item>
                                                 <el-dropdown-item @click="handleDeleteChange(scope.row.id)" v-has="'delete'"><el-icon><Delete /></el-icon> 删 除</el-dropdown-item>
                                             </el-dropdown-menu>
                                         </template>
@@ -58,6 +58,11 @@
                             <el-form-item label="角色编号">
                                 <el-input v-model="form.query.code" size="mini" placeholder="请输入角色编号"  clearable />
                             </el-form-item>
+                            <el-form-item label="角色状态">
+                                <el-select v-model="form.query.status" placeholder="选择角色状态" size="mini" clearable style="width: 100%;">
+                                    <el-option v-for="item in form.roleStatus" :key="item.key"  :label="item.value" :value="item.key"  />
+                                </el-select>
+                            </el-form-item>
                         </el-form>
                     </div>
                 </div>
@@ -69,24 +74,28 @@
                         <el-button title="批量删除" type="primary" :loading="form.isBatchDeleteLoad" v-has="'batch_delete'">批量删除</el-button>
                     </template>
                 </el-popconfirm>
-                <img :src="closeImages" title="关闭搜索栏" @click="close(true)" v-if="!iconIsShow" style="width: 30px;height: 30px;cursor: pointer; margin-left: 5px" class="animate__animated animate__bounceIn"/>
-                <img :src="openImages" title="打开搜索栏" @click="open(false)" v-if="iconIsShow" style="width: 30px;height: 30px;cursor: pointer; margin-left: 5px" class="animate__animated animate__bounceIn"/>
+                <img :src="closeImages" title="关闭搜索栏" @click="close(true)" v-show="!iconIsShow" style="width: 30px;height: 30px;cursor: pointer; margin-left: 5px" class="animate__animated animate__bounceIn"/>
+                <img :src="openImages" title="打开搜索栏" @click="open(false)" v-show="iconIsShow" style="width: 30px;height: 30px;cursor: pointer; margin-left: 5px" class="animate__animated animate__bounceIn"/>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { defineComponent,ref, reactive,onMounted } from 'vue'
+import { defineComponent,ref, reactive,onMounted,watch } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import { encrypt} from '@/utils/system/cryptoAES'
 import { formatterDict} from '@/utils/sys/dictUtils'
 import { arrayIdList,validationMultipleSelection} from '@/utils/system/toolUtils'
 import closeImages from "@/assets/images/colseSearch.png"
 import openImages from "@/assets/images/openSearch.png"
+import { sendNotification } from '@/utils/system/toolUtils'
 export default defineComponent({
-    name: 'user-info',
+    name: 'role-list',
     setup() {
         const store = useStore();
+        const router = useRouter();
         const iconIsShow = ref(false);
         const form = reactive({
             leftSize:'15%',
@@ -97,6 +106,7 @@ export default defineComponent({
             isBatchDeleteLoad:false,
             isClearLoad:false,
             tableLoading:true,
+            roleStatus: store.state.dict.sysDict.sys.roleStatus,
             total:0,
             query:{
                 page:1,
@@ -128,6 +138,12 @@ export default defineComponent({
         const formatter = (row) =>{
             return formatterDict(store.state.dict.sysDict.sys.roleStatus,row.status)
         };
+        //监听路由变化刷新列表
+        watch(()=>router.currentRoute.value.query, (newValue) => {
+            if(newValue.isAddOrEdit){
+                selectDataList()
+            }
+        }, { immediate: true });
         // 组件挂载到页面之后执行
         onMounted(() => {
             selectDataList();
@@ -189,7 +205,7 @@ export default defineComponent({
         const handleBatchDeleteChange = () =>{
             form.isBatchDeleteLoad = validationMultipleSelection(form.multipleSelection);
             if (form.isBatchDeleteLoad) {
-                store.dispatch('role/batch-delete',{keyWords:form.multipleSelection}).then(res =>{
+                store.dispatch('role/batchDeleteRoleInfoByIds',{keyWords:form.multipleSelection}).then(res =>{
                     sendNotification(res.msg,res.type,3000);
                     selectDataList();
                 }).finally(()=>{
@@ -201,7 +217,7 @@ export default defineComponent({
          * 删除
          */
         const handleDeleteChange = (id) =>{
-            store.dispatch('role/delete',{keyWord:id}).then(res =>{
+            store.dispatch('role/deleteRoleInfoById',{keyWord:id}).then(res =>{
                 sendNotification(res.msg,res.type,3000);
                 selectDataList();
             })
@@ -211,14 +227,19 @@ export default defineComponent({
          * 去查看详情
          */
         const handleToInfoChange = (row) =>{
-
+            let roleKey = row.code+'_'+row.id;
+            localStorage.setItem(roleKey,encrypt(JSON.stringify(row)));
+            router.push({
+                path:'/sys/role/info',
+                query:{key:roleKey}
+            })
         };
 
         /**
          * 去新增
          */
         const handleToAddChange = () =>{
-
+            router.push('/sys/role/add')
         };
         /**
          * 去编辑

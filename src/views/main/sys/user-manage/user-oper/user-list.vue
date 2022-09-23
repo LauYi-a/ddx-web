@@ -23,7 +23,7 @@
                             <el-table-column label="操作" fixed="right" width="80" >
                                 <template #default="scope">
                                     <el-dropdown trigger="click">
-                                        <span class="el-dropdown-link">操 作<el-icon class="el-icon--right"><arrow-down /></el-icon> </span>
+                                        <el-icon class="more-operation-icon"><MoreFilled /></el-icon>
                                         <template #dropdown>
                                             <el-dropdown-menu>
                                                 <el-dropdown-item @click="handleToInfoChange(scope.row)" v-has="'info'"><el-icon><View /></el-icon> 详 情</el-dropdown-item>
@@ -68,6 +68,11 @@
                             <el-form-item label="用户邮箱">
                                 <el-input v-model="form.query.email" size="mini" placeholder="请输入用户邮箱"  clearable />
                             </el-form-item>
+                            <el-form-item label="账号状态">
+                                <el-select v-model="form.query.status" placeholder="选择账号状态" size="mini" clearable style="width: 100%;">
+                                    <el-option v-for="item in form.userStatus" :key="item.key"  :label="item.value" :value="item.key"  />
+                                </el-select>
+                            </el-form-item>
                         </el-form>
                     </div>
                 </div>
@@ -109,6 +114,7 @@ export default defineComponent({
             isBatchDeleteLoad:false,
             isClearLoad:false,
             tableLoading:true,
+            userStatus: store.state.dict.sysDict.sys.userStatus,
             total:0,
             query:{
                 page:1,
@@ -116,7 +122,8 @@ export default defineComponent({
                 username:'',
                 nickname:'',
                 mobile:'',
-                email:''
+                email:'',
+                status:''
             },
             multipleSelection:[],
             tableData:[]

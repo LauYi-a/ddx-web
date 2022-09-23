@@ -1,15 +1,24 @@
 <template>
     <div class="operation">
         <div class="operation-top">
-            <el-page-header content="用户列表" @back="goBack" >
-                <template #icon>
-                    <el-icon><ArrowLeftBold /></el-icon>
-                </template>
-            </el-page-header>
-            <div class="header-title-common">用户基本信息</div>
+            <div class="pager-header-right">
+                <div class="header-title-common">用户基本信息</div>
+                <div class="pager-header">
+                    <el-page-header content="用户列表" @back="goBack" >
+                        <template #icon>
+                            <el-icon><ArrowLeftBold /></el-icon>
+                        </template>
+                    </el-page-header>
+                </div>
+            </div>
             <div class="operation-top-form">
                 <el-form  label-position="right"  :rules="rules" ref="ruleForm"  label-width="150px" :model="form.userInfo">
                     <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="登入账号" prop="username">
+                                <el-input v-model="form.userInfo.username" size="mini" placeholder="输入登入账号" clearable />
+                            </el-form-item>
+                        </el-col>
                         <el-col :span="8">
                             <el-form-item label="账号名称" prop="nickname">
                                 <el-input v-model="form.userInfo.nickname" size="mini" placeholder="输入账号名称" clearable/>
@@ -20,25 +29,11 @@
                                 <el-input v-model="form.userInfo.mobile" size="mini" placeholder="输入手机号" clearable/>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="默认登入服务" prop="loginService">
-                                <el-select v-model="form.userInfo.loginService" placeholder="选择默认登入服务" size="mini" clearable filterable style="width: 100%;">
-                                    <el-option v-for="item in form.services" :key="item.key"  :label="item.value" :value="item.key" ></el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="邮箱号" prop="email">
                                 <el-input v-model="form.userInfo.email" size="mini" placeholder="输入邮箱号" clearable/>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="账户状态" prop="status">
-                                <el-select v-model="form.userInfo.status" placeholder="选择状态" size="mini" clearable style="width: 100%;">
-                                    <el-option v-for="item in form.userStatus" :key="item.key"  :label="item.value" :value="item.key"  />
-                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -48,12 +43,10 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                    </el-row>
-                    <el-row>
                         <el-col :span="8">
                             <el-form-item label="角色" prop="roleIds">
-                                <el-select style="width: 100%;" v-model="form.userInfo.roleIds"
-                                           clearable multiple filterable collapse-tags reserve-keyword placeholder="选择角色">
+                                <el-select v-model="form.userInfo.roleIds" placeholder="选择角色" size="mini"
+                                           clearable filterable multiple collapse-tags reserve-keyword style="width: 100%;">
                                     <el-option v-for="item in form.roleList" :key="item.id"  :label="item.name" :value="item.id"  />
                                 </el-select>
                             </el-form-item>
@@ -73,7 +66,6 @@
                                 node-key="id"
                                 :expand-on-click-node="false"
                                 :check-on-click-node="true"
-                                :default-checked-keys="form.userInfo.resourceIds"
                                 check-strictly="true"
                                 default-expand-all="true"
                                 @check="tabsTreeCurrentChecked"
@@ -91,35 +83,28 @@
 </template>
 
 <script>
-import { defineComponent,ref, reactive,onUnmounted,onMounted} from 'vue'
+import { defineComponent,ref, reactive,onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter,useRoute,onBeforeRouteLeave } from 'vue-router'
+import { useRouter,onBeforeRouteLeave } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
 import { sendNotification } from '@/utils/system/toolUtils'
-import { decrypt} from '@/utils/system/cryptoAES'
-import ok from "@/assets/images/ok.ico"
+import ok from "@/assets/images/add.png"
 export default defineComponent({
     setup() {
         const ruleForm = ref(null);
         const store = useStore();
         const router = useRouter();
-        const route = useRoute();
-        const initUserInfo = JSON.parse(decrypt(localStorage.getItem(route.query.userId)) || '{}');
         const form = reactive({
             userInfo: {
-                id:initUserInfo.id,
-                loginService:initUserInfo.loginService,
-                nickname:initUserInfo.nickname,
-                mobile:initUserInfo.mobile,
-                email:initUserInfo.email,
-                gender:initUserInfo.gender,
-                status:initUserInfo.status,
+                username:"",
+                nickname:"",
+                mobile:"",
+                email:"",
+                gender:"",
                 roleIds:[],
                 resourceIds:[]
             },
-            services: store.state.dict.sysDict.all.serviceModulesName,
             genders: store.state.dict.sysDict.sys.userGender,
-            userStatus: store.state.dict.sysDict.sys.userStatus,
             isLoad:true,
             roleList:[],
             isSave:false,
@@ -128,17 +113,16 @@ export default defineComponent({
             resourceList:[]
         });
         const rules = {
-            loginService: [{ required: true, message: '请选择默认登入服务', trigger: 'blur' }],
+            username: [{ required: true, message: '请输入登入账号', trigger: 'blur' }],
             nickname: [{ required: true, message: '请输入账号名称', trigger: 'blur' }],
             mobile: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
             email: [{ required: true, message: '请输入邮箱号', trigger: 'blur' }],
             gender: [{ required: true, message: '请选择性别', trigger: 'blur' }],
-            status: [{ required: true, message: '请选择用户状态', trigger: 'blur' }],
             roleIds: [{ required: true, message: '请选择角色', trigger: 'blur' }],
         };
         //返回
         const goBack = () =>{
-            ElMessageBox.confirm( '当前编辑数据还未保存，确定需要返回吗？','返回提醒',{
+            ElMessageBox.confirm( '当前数据还未保存，确定需要返回吗？','返回提醒',{
                 confirmButtonText: '确定',
                 cancelButtonText: '关闭',
                 type: 'warning',
@@ -150,7 +134,7 @@ export default defineComponent({
         onBeforeRouteLeave((to, from,next) => {
             if(!form.isSave){
                 if (!form.isBack){
-                    ElMessageBox.confirm( '当前编辑数据还未保存，确定需要离开吗？','离开提醒',{
+                    ElMessageBox.confirm( '当前数据还未保存，确定需要离开吗？','离开提醒',{
                         confirmButtonText: '确定',
                         cancelButtonText: '关闭',
                         type: 'warning',
@@ -192,7 +176,7 @@ export default defineComponent({
                             return false;
                         }
                         form.isLoad = false;
-                        store.dispatch('user/userEdit',form.userInfo).then(res => {
+                        store.dispatch('user/userAdd',form.userInfo).then(res => {
                             sendNotification(res.msg,res.type,3000);
                             form.isSave = true;
                             router.back();
@@ -219,40 +203,13 @@ export default defineComponent({
         const selectMenuTree = () =>{
             store.dispatch('resource/selectMenuTree').then(res => {
                 form.resourceList = res.data;
-            })
-        };
-        /**
-         * 加载用户角色ID
-         */
-        const loadRoleIds = (roleList) =>{
-            if (roleList){
-                roleList.forEach(role =>{
-                    form.userInfo.roleIds.push(role.id)
-                })
-            }
-        };
-
-        /**
-         * 加载用户菜单ID集合
-         */
-        const loadResourceIds = (userId ) =>{
-            store.dispatch('resource/selectUserResourceIds',{id:userId}).then(res => {
-                form.userInfo.resourceIds = res.data.resourceIds;
+                form.activeTabName = res.data[0].serviceCode;
             })
         };
         // 组件挂载到页面之后执行
         onMounted(() => {
-            if (initUserInfo) {
-                form.activeTabName = initUserInfo.loginService;
-                loadRoleIds(initUserInfo.roleList);
-                loadResourceIds(initUserInfo.id)
-            }
             selectRoleKyeAndValAll();
             selectMenuTree();
-        });
-        //组件卸载之前执行的函数
-        onUnmounted(() => {
-            localStorage.removeItem(initUserInfo.userId)
         });
         return {
             ok,
@@ -277,9 +234,8 @@ export default defineComponent({
     flex-direction: column;
     box-sizing: border-box;
     .operation-top{
-        height: 225px;
+        height: 185px;
         margin: 5px 5px 0px 5px;
-        min-height: 150px;
         overflow-y: auto;
         .operation-top-form{
             width: 100%;
@@ -296,16 +252,14 @@ export default defineComponent({
         }
     }
     .operation-bottom{
-        height: calc(100% - 240px);
+        height: calc(100% - 200px);
         margin: 5px 5px 5px 5px;
-        min-height: 150px;
         overflow-y: auto;
         .demo-tabs{
-            height:  calc(100% - 60px);
+            height:  calc(100% - 55px);
             overflow-y: auto;
             .tab-tree-body{
-                height: 360px;
-                min-height: 50px;
+                height: 400px;
                 overflow-y: auto;
                 &::-webkit-scrollbar {
                     display: none;
@@ -345,6 +299,5 @@ export default defineComponent({
             }
         }
     }
-
 }
 </style>

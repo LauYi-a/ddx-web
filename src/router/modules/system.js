@@ -8,6 +8,34 @@ import { createNameComponent } from '../createNode'
  * */
 const route = [
   {
+    path: '/sys/role/info',
+    component: Layout,
+    redirect: '/sys/role/roleInfo',
+    hideMenu: true,
+    meta: { title: '角色信息' },
+    children: [
+      {
+        path: '/sys/role/roleInfo',
+        component: createNameComponent(() => import('@/views/main/sys/user-manage/role-oper/role-info.vue')),
+        meta: { title: '角色详情', hideTabs: true }
+      }
+    ]
+  },
+  {
+    path: '/sys/role/add',
+    component: Layout,
+    redirect: '/sys/role/roleAdd',
+    hideMenu: true,
+    meta: { title: '新增角色' },
+    children: [
+      {
+        path: '/sys/role/roleAdd',
+        component: createNameComponent(() => import('@/views/main/sys/user-manage/role-oper/role-add.vue')),
+        meta: { title: '创建角色信息', hideTabs: true }
+      }
+    ]
+  },
+  {
     path: '/sys/user/center',
     component: Layout,
     redirect: '/sys/user/personalCenter',
@@ -16,7 +44,7 @@ const route = [
     children: [
       {
         path: '/sys/user/personalCenter',
-        component: createNameComponent(() => import('@/views/main/sys/user/userInfo/user-personal-center.vue')),
+        component: createNameComponent(() => import('@/views/main/sys/user-manage/user-oper/user-personal-center.vue')),
         meta: { title: '个人中心', hideTabs: true }
       }
     ]
@@ -31,7 +59,7 @@ const route = [
     children: [
       {
         path: '/sys/user/userInfo',
-        component: createNameComponent(() => import('@/views/main/sys/user/userInfo/user-info.vue')),
+        component: createNameComponent(() => import('@/views/main/sys/user-manage/user-oper/user-info.vue')),
         meta: { title: '详情信息', hideTabs: true }
       }
     ]
@@ -46,7 +74,7 @@ const route = [
     children: [
       {
         path: '/sys/user/userAdd',
-        component: createNameComponent(() => import('@/views/main/sys/user/userOper/user-add.vue')),
+        component: createNameComponent(() => import('@/views/main/sys/user-manage/user-oper/user-add.vue')),
         meta: { title: '创建用户信息', hideTabs: true }
       }
     ]
@@ -61,7 +89,7 @@ const route = [
     children: [
       {
         path: '/sys/user/userEdit',
-        component: createNameComponent(() => import('@/views/main/sys/user/userOper/user-edit.vue')),
+        component: createNameComponent(() => import('@/views/main/sys/user-manage/user-oper/user-edit.vue')),
         meta: { title: '编辑用户信息', hideTabs: true }
       }
     ]

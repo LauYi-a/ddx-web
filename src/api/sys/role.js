@@ -10,11 +10,41 @@ export function selectPageRoleListApi(data) {
     data:data
   })
 }
+
 // 查询所有角色键值
 export function selectRoleKyeAndValAllApi() {
   return request({
     url: '/sys-role/select-role-key-val-all',
     method: 'post',
     baseURL: '/ddx/sys'
+  })
+}
+// 新增角色信息
+export function roleAddApi(data) {
+  return request({
+    url: '/sys-role/add',
+    method: 'post',
+    baseURL: '/ddx/sys',
+    data:data
+  })
+}
+
+// 删除用户
+export function deleteRoleInfoByIdApi(data) {
+  return request({
+    url: '/sys-role/delete',
+    method: 'post',
+    baseURL: '/ddx/sys',
+    data:data
+  })
+}
+
+// 批量删除用户
+export function batchDeleteRoleInfoByIdsApi(data) {
+  return request({
+    url: '/sys-role/batch-delete',
+    method: 'post',
+    baseURL: '/ddx/sys',
+    data:data
   })
 }
