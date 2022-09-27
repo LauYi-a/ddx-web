@@ -19,6 +19,13 @@
                                 <el-input v-model="form.roleInfo.name" size="mini" placeholder="输入角色名称" clearable />
                             </el-form-item>
                         </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="角色状态" prop="status">
+                                <el-select v-model="form.roleInfo.status" placeholder="选择角色状态" size="mini" clearable style="width: 100%;">
+                                    <el-option v-for="item in form.roleStatus" :key="item.key"  :label="item.value" :value="item.key"  />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
                     </el-row>
                 </el-form>
             </div>
@@ -55,7 +62,7 @@
                     </template>
                     <div class="user-div-row">
                         <el-checkbox-group v-model="form.roleInfo.rolePermissionId">
-                            <el-checkbox v-for="permission in form.permissions" :key="permission.id" :label="permission.id" @change="handleCheckedPermissionChange">
+                            <el-checkbox v-for="permission in form.permissions" :key="permission.id" :label="permission.id"  @change="handleCheckedPermissionChange">
                                 <el-tag size="small" style="margin-bottom: 5px;margin-right: 5px" >
                                     <span  v-for="(item, key) in form.serviceModulesName" :key="key"> {{item.key===permission.serviceModule? item.value:''}} </span>
                                 </el-tag>
@@ -75,41 +82,47 @@
 </template>
 
 <script>
-import { defineComponent,ref, reactive,onMounted } from 'vue'
+import { defineComponent,ref, reactive,onMounted,onUnmounted } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter,onBeforeRouteLeave } from 'vue-router'
+import { useRouter,useRoute,onBeforeRouteLeave } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
 import { sendNotification } from '@/utils/system/toolUtils'
-import ok from "@/assets/images/add.png"
+import { decrypt} from '@/utils/system/cryptoAES'
+import ok from "@/assets/images/ok.ico"
 export default defineComponent({
     setup() {
         const ruleForm = ref(null);
         const store = useStore();
         const router = useRouter();
+        const route = useRoute();
+        const initRoleInfo = JSON.parse(decrypt(localStorage.getItem(route.query.key)) || '{}');
         const form = reactive({
             isSave:false,
             isLoad:true,
-            checkAllPermission:false,
             isIndeterminate:false,
+            checkAllPermission:false,
             permissions:[],
             permissions_copy:[],
             roleInfo: {
-                name:"",
-                rolePermissionId:[]
+                id:initRoleInfo.id,
+                name:initRoleInfo.name,
+                status:initRoleInfo.status,
+                rolePermissionId:initRoleInfo.rolePermission || [],
             },
             query:{
                 permissionKey:'',
                 serviceKey:store.state.dict.sysDict.all.serviceModulesName[0].key
             },
+            roleStatus: store.state.dict.sysDict.sys.roleStatus,
             serviceModulesName: store.state.dict.sysDict.all.serviceModulesName
-
         });
         const rules = {
             name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
+            status: [{ required: true, message: '请选择状态', trigger: 'blur' }],
         };
         //返回
         const goBack = () =>{
-            ElMessageBox.confirm( '当前数据还未保存，确定需要返回吗？','返回提醒',{
+            ElMessageBox.confirm( '当前编辑数据还未保存，确定需要返回吗？','返回提醒',{
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning',
@@ -120,20 +133,21 @@ export default defineComponent({
         };
         onBeforeRouteLeave((to, from,next) => {
             if (!form.isBack){
-                ElMessageBox.confirm( '当前数据还未保存，确定需要离开吗？','离开提醒',{
+                ElMessageBox.confirm( '当前编辑数据还未保存，确定需要离开吗？','离开提醒',{
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning',
                 }).then(() => {
                     next();
                 }).catch(()=>{})
+            }else {
+                next();
             }
             if(form.isSave){
                 to.query  ={isAddOrEdit:form.isSave};
                 next();
             }
         });
-
         /**
          * 提交保存
          */
@@ -146,7 +160,7 @@ export default defineComponent({
                             return false;
                         }
                         form.isLoad = false;
-                        store.dispatch('role/roleAdd',form.roleInfo).then(res => {
+                        store.dispatch('role/roleEdit',form.roleInfo).then(res => {
                             sendNotification(res.msg,res.type,3000);
                             form.isSave = true;
                             router.back();
@@ -212,44 +226,140 @@ export default defineComponent({
             store.dispatch('permission/selectPermissionAll').then(res => {
                 form.permissions_copy = res.data;
                 selectPermissionKey();
+                loadRolePermission(initRoleInfo.rolePermission);
             })
+        };
+        /**
+         *  加载权限ID
+         */
+        const loadRolePermission = (rolePermissions) =>{
+            if (rolePermissions) {
+                form.roleInfo.rolePermissionId = [];
+                rolePermissions.forEach(permission =>{
+                    form.roleInfo.rolePermissionId.push(permission.id);
+                });
+                form.checkAllPermission =  form.roleInfo.rolePermissionId.length === form.permissions_copy.length;
+                form.isIndeterminate = form.roleInfo.rolePermissionId.length > 0 && form.roleInfo.rolePermissionId.length < form.permissions_copy.length;
+            }
         };
         // 组件挂载到页面之后执行
         onMounted(() => {
-           selectPermissionAll()
+            selectPermissionAll();
         });
-        return{
+        //组件卸载之前执行的函数
+        onUnmounted(() => {
+            localStorage.removeItem(initRoleInfo.code)
+        });
+        return {
             ok,
             form,
             ruleForm,
-            rules,
-            goBack,
             submit,
+            goBack,
+            rules,
             selectPermissionKey,
-            handleCheckedPermissionChange,
-            handleCheckAllPermissionChange
+            handleCheckAllPermissionChange,
+            handleCheckedPermissionChange
         }
     }
 })
 </script>
 
 <style lang="scss" scoped>
-.operation{
-    width: 100%;
-    height: 100%;
-    display: flex;
-    overflow-y: auto;
-    flex-direction: column;
-    box-sizing: border-box;
-    .operation-top {
-        height: 180px;
-        margin: 5px 5px 0px 5px;
-        min-height: 100px;
+    .operation{
+        width: 100%;
+        height: 100%;
+        display: flex;
         overflow-y: auto;
-        .operation-top-form{
-            width: 100%;
-            height:  calc(100% - 70px);
+        flex-direction: column;
+        box-sizing: border-box;
+        .operation-top {
+            height: 180px;
+            margin: 5px 5px 0px 5px;
+            min-height: 100px;
             overflow-y: auto;
+            .operation-top-form{
+                width: 100%;
+                height:  calc(100% - 70px);
+                overflow-y: auto;
+                &::-webkit-scrollbar {
+                    display: none;
+                    width: 6px;
+                }
+                &::-webkit-scrollbar-thumb {
+                    border-radius: 10px;
+                    background: rgba(144, 147, 153, 0.3);
+                }
+            }
+        }
+        .operation-bottom{
+            height: calc(100%);
+            margin: 5px 5px 5px 5px;
+            overflow-y: auto;
+            :deep() {
+                .el-descriptions__header{
+                    .el-descriptions__title{
+                        color: var(--system-page-color);
+                    }
+                    .el-input-group__append{
+                        cursor:pointer;
+                        background:var(--system-container-background);
+                        color: var(--system-page-tip-color);
+                        border-color: var(--system-page-border-color);
+                    }
+                    .el-input{
+                        .el-input__inner{
+                            background:var(--system-container-background);
+                            color: var(--system-page-tip-color);
+                            border-color: var(--system-page-border-color);
+                        }
+                    }
+                    margin-bottom: 10px;
+                }
+                .el-descriptions__body{
+                    .is-bordered{
+                        .el-descriptions__label{
+                            background:var(--system-container-background);
+                            color: var(--system-page-tip-color);
+                            border-color: var(--system-page-border-color);
+                        }
+                        .el-descriptions__content{
+                            background:var(--system-container-main-background);
+                            color: var(--system-page-color);
+                            border-color: var(--system-page-border-color);
+                        }
+                        .el-input{
+                            width: 150px;
+                            height: 25px;
+                            font-size: 9px;
+                            display: flex;
+                            align-items: center;
+                            .el-input__inner{
+                                height: 25px;
+                                width: 150px;
+                                font-size: 9px;
+                                display: flex;
+                                align-items: center;
+                                background: var(--system-container-background);
+                                color:var(--system-page-tip-color);
+                                border-color: var(--system-page-border-color);
+                            }
+                            .el-input__suffix{
+                                font-size: 9px;
+                                display: flex;
+                                align-items: center;
+                            }
+                        }
+                    }
+                }
+                .permission-label{
+                    width: 130px;
+                }
+            }
+        }
+        .user-div-row{
+            height: 450px;
+            overflow: auto;
             &::-webkit-scrollbar {
                 display: none;
                 width: 6px;
@@ -258,124 +368,46 @@ export default defineComponent({
                 border-radius: 10px;
                 background: rgba(144, 147, 153, 0.3);
             }
-        }
-    }
-    .operation-bottom{
-        height: calc(100%);
-        margin: 5px 5px 5px 5px;
-        overflow-y: auto;
-        :deep() {
-            .el-descriptions__header{
-                .el-descriptions__title{
-                    color: var(--system-page-color);
+            //鼠标悬浮显示滚动条
+            &:hover {
+                &::-webkit-scrollbar {
+                    display: block;
                 }
-                .el-input-group__append{
-                    cursor:pointer;
-                    background:var(--system-container-background);
-                    color: var(--system-page-tip-color);
-                    border-color: var(--system-page-border-color);
-                }
-                .el-input{
-                    .el-input__inner{
-                        background:var(--system-container-background);
-                        color: var(--system-page-tip-color);
-                        border-color: var(--system-page-border-color);
-                    }
-                }
-                margin-bottom: 10px;
-            }
-            .el-descriptions__body{
-                .is-bordered{
-                    .el-descriptions__label{
-                        background:var(--system-container-background);
-                        color: var(--system-page-tip-color);
-                        border-color: var(--system-page-border-color);
-                    }
-                    .el-descriptions__content{
-                        background:var(--system-container-main-background);
-                        color: var(--system-page-color);
-                        border-color: var(--system-page-border-color);
-                    }
-                    .el-input{
-                        width: 150px;
-                        height: 25px;
-                        font-size: 9px;
-                        display: flex;
-                        align-items: center;
-                        .el-input__inner{
-                            height: 25px;
-                            width: 150px;
-                            font-size: 9px;
-                            display: flex;
-                            align-items: center;
-                            background: var(--system-container-background);
-                            color:var(--system-page-tip-color);
-                            border-color: var(--system-page-border-color);
-                        }
-                        .el-input__suffix{
-                            font-size: 9px;
-                            display: flex;
-                            align-items: center;
-                        }
+                &::-webkit-scrollbar-thumb {
+                    border-radius: 10px;
+                    background: rgba(144, 147, 153, 0.3);
+                    &:hover {
+                        background: rgba(144, 147, 153, 0.5);
                     }
                 }
             }
-            .permission-label{
-                width: 130px;
-            }
         }
-    }
-    .user-div-row{
-        height: 450px;
-        overflow: auto;
-        &::-webkit-scrollbar {
-            display: none;
-            width: 6px;
-        }
-        &::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            background: rgba(144, 147, 153, 0.3);
-        }
-        //鼠标悬浮显示滚动条
-        &:hover {
+        .operation-top,.operation-bottom{
+            background-color: var(--system-container-main-background);
+            color: var(--system-page-color);
+            padding: 5px;
+            width: calc(100% - 20px);
             &::-webkit-scrollbar {
-                display: block;
+                display: none;
+                width: 6px;
             }
             &::-webkit-scrollbar-thumb {
                 border-radius: 10px;
                 background: rgba(144, 147, 153, 0.3);
-                &:hover {
-                    background: rgba(144, 147, 153, 0.5);
+            }
+            //鼠标悬浮显示滚动条
+            &:hover {
+                &::-webkit-scrollbar {
+                    display: block;
+                }
+                &::-webkit-scrollbar-thumb {
+                    border-radius: 10px;
+                    background: rgba(144, 147, 153, 0.3);
+                    &:hover {
+                        background: rgba(144, 147, 153, 0.5);
+                    }
                 }
             }
         }
     }
-    .operation-top,.operation-bottom{
-        background-color: var(--system-container-main-background);
-        color: var(--system-page-color);
-        padding: 5px;
-        width: calc(100% - 20px);
-        &::-webkit-scrollbar {
-            display: none;
-            width: 6px;
-        }
-        &::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            background: rgba(144, 147, 153, 0.3);
-        }
-        //鼠标悬浮显示滚动条
-        &:hover {
-            &::-webkit-scrollbar {
-                display: block;
-            }
-            &::-webkit-scrollbar-thumb {
-                border-radius: 10px;
-                background: rgba(144, 147, 153, 0.3);
-                &:hover {
-                    background: rgba(144, 147, 153, 0.5);
-                }
-            }
-        }
-    }
-}
 </style>

@@ -163,8 +163,7 @@ export default defineComponent({
         };
         //组件卸载之前执行的函数
         onUnmounted(() => {
-            let roleKey = initRoleInfo.code+'_'+initRoleInfo.id;
-            localStorage.removeItem(roleKey)
+            localStorage.removeItem(initRoleInfo.code)
         });
         return {
             form,

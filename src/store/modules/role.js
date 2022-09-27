@@ -1,4 +1,4 @@
-import { selectPageRoleListApi,selectRoleKyeAndValAllApi,roleAddApi,deleteRoleInfoByIdApi,batchDeleteRoleInfoByIdsApi } from '@/api/sys/role'
+import { selectPageRoleListApi,selectRoleKyeAndValAllApi,roleAddApi,deleteRoleInfoByIdApi,batchDeleteRoleInfoByIdsApi,roleEditApi } from '@/api/sys/role'
 import { sendNotification } from '@/utils/system/toolUtils'
 
 const state = () => ({
@@ -60,6 +60,24 @@ const actions = {
   roleAdd({ commit, dispatch }, params) {
     return new Promise((resolve, reject) => {
       roleAddApi(params).then(res => {
+        resolve(res)
+      }).catch(error =>{
+        sendNotification(error.msg,error.type,3000);
+        reject(error)
+      })
+    })
+  },
+  /**
+   * 修改角色
+   * @param commit
+   * @param dispatch
+   * @param params
+   * @returns {Promise<any>} resolve 正常返回数据 reject 返回异常数据
+   * 如果调用者需要 finally 则需要返回  reject(error) 不然 finally 将会失效
+   */
+  roleEdit({ commit, dispatch }, params) {
+    return new Promise((resolve, reject) => {
+      roleEditApi(params).then(res => {
         resolve(res)
       }).catch(error =>{
         sendNotification(error.msg,error.type,3000);

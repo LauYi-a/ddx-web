@@ -227,11 +227,10 @@ export default defineComponent({
          * 去查看详情
          */
         const handleToInfoChange = (row) =>{
-            let roleKey = row.code+'_'+row.id;
-            localStorage.setItem(roleKey,encrypt(JSON.stringify(row)));
+            localStorage.setItem(row.code,encrypt(JSON.stringify(row)));
             router.push({
                 path:'/sys/role/info',
-                query:{key:roleKey}
+                query:{key:row.code}
             })
         };
 
@@ -244,8 +243,12 @@ export default defineComponent({
         /**
          * 去编辑
          */
-        const handleToEditChange = () =>{
-
+        const handleToEditChange = (row) =>{
+            localStorage.setItem(row.code,encrypt(JSON.stringify(row)));
+            router.push({
+                path:'/sys/role/edit',
+                query:{key:row.code}
+            })
         };
         return {
             form,

@@ -8,6 +8,20 @@ import { createNameComponent } from '../createNode'
  * */
 const route = [
   {
+    path: '/sys/role/edit',
+    component: Layout,
+    redirect: '/sys/role/roleEdit',
+    hideMenu: true,
+    meta: { title: '编辑角色' },
+    children: [
+      {
+        path: '/sys/role/roleEdit',
+        component: createNameComponent(() => import('@/views/main/sys/user-manage/role-oper/role-edit.vue')),
+        meta: { title: '编辑角色信息', hideTabs: true }
+      }
+    ]
+  },
+  {
     path: '/sys/role/info',
     component: Layout,
     redirect: '/sys/role/roleInfo',

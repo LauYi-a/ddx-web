@@ -124,7 +124,7 @@ export default defineComponent({
         const goBack = () =>{
             ElMessageBox.confirm( '当前数据还未保存，确定需要返回吗？','返回提醒',{
                 confirmButtonText: '确定',
-                cancelButtonText: '关闭',
+                cancelButtonText: '取消',
                 type: 'warning',
             }).then(() => {
                 form.isBack = true;
@@ -132,19 +132,16 @@ export default defineComponent({
             }).catch(()=>{})
         };
         onBeforeRouteLeave((to, from,next) => {
-            if(!form.isSave){
-                if (!form.isBack){
-                    ElMessageBox.confirm( '当前数据还未保存，确定需要离开吗？','离开提醒',{
-                        confirmButtonText: '确定',
-                        cancelButtonText: '关闭',
-                        type: 'warning',
-                    }).then(() => {
-                        next();
-                    }).catch(()=>{})
-                }else{
+            if (!form.isBack){
+                ElMessageBox.confirm( '当前数据还未保存，确定需要离开吗？','离开提醒',{
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                }).then(() => {
                     next();
-                }
-            }else{
+                }).catch(()=>{})
+            }
+            if(form.isSave){
                 to.query  ={isAddOrEdit:form.isSave};
                 next();
             }

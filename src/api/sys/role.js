@@ -29,6 +29,16 @@ export function roleAddApi(data) {
   })
 }
 
+// 修改角色信息
+export function roleEditApi(data) {
+  return request({
+    url: '/sys-role/edit',
+    method: 'post',
+    baseURL: '/ddx/sys',
+    data:data
+  })
+}
+
 // 删除用户
 export function deleteRoleInfoByIdApi(data) {
   return request({

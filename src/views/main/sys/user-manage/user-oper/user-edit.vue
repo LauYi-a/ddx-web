@@ -78,8 +78,8 @@
                                 :expand-on-click-node="false"
                                 :check-on-click-node="true"
                                 :default-checked-keys="form.userInfo.resourceIds"
-                                check-strictly="true"
-                                default-expand-all="true"
+                                :check-strictly="true"
+                                :default-expand-all="true"
                                 @check="tabsTreeCurrentChecked"
                         ></el-tree>
                     </div>
@@ -144,7 +144,7 @@ export default defineComponent({
         const goBack = () =>{
             ElMessageBox.confirm( '当前编辑数据还未保存，确定需要返回吗？','返回提醒',{
                 confirmButtonText: '确定',
-                cancelButtonText: '关闭',
+                cancelButtonText: '取消',
                 type: 'warning',
             }).then(() => {
                 form.isBack = true;
@@ -152,19 +152,18 @@ export default defineComponent({
             }).catch(()=>{})
         };
         onBeforeRouteLeave((to, from,next) => {
-            if(!form.isSave){
-                if (!form.isBack){
-                    ElMessageBox.confirm( '当前编辑数据还未保存，确定需要离开吗？','离开提醒',{
-                        confirmButtonText: '确定',
-                        cancelButtonText: '关闭',
-                        type: 'warning',
-                    }).then(() => {
-                        next();
-                    }).catch(()=>{})
-                }else{
+            if (!form.isBack){
+                ElMessageBox.confirm( '当前编辑数据还未保存，确定需要离开吗？','离开提醒',{
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                }).then(() => {
                     next();
-                }
-            }else{
+                }).catch(()=>{})
+            }else {
+                next();
+            }
+            if(form.isSave){
                 to.query  ={isAddOrEdit:form.isSave};
                 next();
             }
@@ -230,6 +229,7 @@ export default defineComponent({
          */
         const loadRoleIds = (roleList) =>{
             if (roleList){
+                form.userInfo.roleIds = [];
                 roleList.forEach(role =>{
                     form.userInfo.roleIds.push(role.id)
                 })
@@ -241,7 +241,7 @@ export default defineComponent({
          */
         const loadResourceIds = (userId ) =>{
             store.dispatch('resource/selectUserResourceIds',{id:userId}).then(res => {
-                form.userInfo.resourceIds = res.data.resourceIds;
+                form.userInfo.resourceIds = res.data;
             })
         };
         // 组件挂载到页面之后执行
@@ -255,9 +255,9 @@ export default defineComponent({
             selectMenuTree();
         });
         //组件卸载之前执行的函数
-        onUnmounted(() => {
+       /* onUnmounted(() => {
             localStorage.removeItem(initUserInfo.userId)
-        });
+        });*/
         return {
             ok,
             form,
