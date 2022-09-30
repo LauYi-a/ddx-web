@@ -1,17 +1,11 @@
 <template>
   <div v-drag >
-    <el-dialog
-      ref="dialog"
-      v-model="layer.show"
-      :title="layer.title"
-      :width="layer.width"
-      center
-    >
+    <el-dialog ref="dialog" v-model="layer.show" :title="layer.title" :width="layer.width">
       <slot></slot>
       <template #footer v-if="layer.showButton">
         <div>
-          <el-button type="primary" @click="confirm">确认</el-button>
           <el-button @click="close">取消</el-button>
+          <el-button type="primary" @click="confirm">确认</el-button>
         </div>
       </template>
     </el-dialog>

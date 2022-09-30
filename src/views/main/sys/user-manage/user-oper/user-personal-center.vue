@@ -235,7 +235,7 @@ export default defineComponent({
             radioRole:'',
             query:{
                 permissionKey:'',
-                serviceKey:store.state.dict.sysDict.all.serviceModulesName[0].key
+                serviceKey:store.state.user.services[0]
             },
             userGender:[],
             userStatus:[],
@@ -463,27 +463,6 @@ export default defineComponent({
  .user-div-row{
      height: 155px;
      overflow: auto;
-     &::-webkit-scrollbar {
-         display: none;
-         width: 6px;
-     }
-     &::-webkit-scrollbar-thumb {
-         border-radius: 10px;
-         background: rgba(144, 147, 153, 0.3);
-     }
-     //鼠标悬浮显示滚动条
-     &:hover {
-       &::-webkit-scrollbar {
-         display: block;
-       }
-       &::-webkit-scrollbar-thumb {
-         border-radius: 10px;
-         background: rgba(144, 147, 153, 0.3);
-         &:hover {
-           background: rgba(144, 147, 153, 0.5);
-         }
-       }
-     }
  }
  .user-el-tag{
      cursor:pointer;

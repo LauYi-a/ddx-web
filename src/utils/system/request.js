@@ -67,7 +67,7 @@ function showError(error) {
         }
     }else {
         //4001 用户权限不足处理
-        if (error.type === 4001) {
+        if (error.code === 4001) {
             router.push('/401')
         }
         console.error(error);

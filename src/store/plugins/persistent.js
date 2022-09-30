@@ -1,9 +1,9 @@
 import { encrypt,decrypt} from '@/utils/system/cryptoAES'
-const exclude = ['actions', 'getters', 'mutations', 'namespaced']
+const exclude = ['actions', 'getters', 'mutations', 'namespaced'];
 export default function Presistent({ key, modules, modulesKeys }) {
   return (store) => {
-    const localOldState = JSON.parse(localStorage.getItem(key) || '{}')
-    const sessionOldState = JSON.parse(sessionStorage.getItem(key) || '{}')
+    const localOldState = JSON.parse(localStorage.getItem(key) || '{}');
+    const sessionOldState = JSON.parse(sessionStorage.getItem(key) || '{}');
     let oldState = {}
     Object.assign(oldState, localOldState, sessionOldState)
     if (Object.keys(oldState).length > 0) {
@@ -15,14 +15,14 @@ export default function Presistent({ key, modules, modulesKeys }) {
     store.subscribe((mutation, state) => {
       // 判断是否需要缓存数据至localStorage
       if (modulesKeys.local.length > 0) {
-        const localData = setData(store.state, modulesKeys.local)
+        const localData = setData(store.state, modulesKeys.local);
         localStorage.setItem(key, encrypt(JSON.stringify(localData)))
       } else {
         localStorage.removeItem(key)
       }
       // 判断是否需要缓存数据至sessionStorage
       if (modulesKeys.session.length > 0) {
-        const sessionData = setData(store.state, modulesKeys.session)
+        const sessionData = setData(store.state, modulesKeys.session);
         sessionStorage.setItem(key, JSON.stringify(sessionData))
       } else {
         sessionStorage.removeItem(key)
@@ -32,7 +32,7 @@ export default function Presistent({ key, modules, modulesKeys }) {
 }
 
 function setData(state, module) {
-  let data = {}
+  let data = {};
   for (const i of module) {
     data[i] = state[i]
   }

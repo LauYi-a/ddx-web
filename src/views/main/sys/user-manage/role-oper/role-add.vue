@@ -53,16 +53,14 @@
                         </div><br>
                         <el-checkbox  v-model="form.checkAllPermission" :indeterminate="form.isIndeterminate" @change="handleCheckAllPermissionChange">全选权限</el-checkbox>
                     </template>
-                    <div class="user-div-row">
-                        <el-checkbox-group v-model="form.roleInfo.rolePermissionId">
-                            <el-checkbox v-for="permission in form.permissions" :key="permission.id" :label="permission.id" @change="handleCheckedPermissionChange">
-                                <el-tag size="small" style="margin-bottom: 5px;margin-right: 5px" >
-                                    <span  v-for="(item, key) in form.serviceModulesName" :key="key"> {{item.key===permission.serviceModule? item.value:''}} </span>
-                                </el-tag>
-                                {{permission.name }}
-                            </el-checkbox>
-                        </el-checkbox-group>
-                    </div>
+                    <el-checkbox-group v-model="form.roleInfo.rolePermissionId">
+                        <el-checkbox v-for="permission in form.permissions" :key="permission.id" :label="permission.id" @change="handleCheckedPermissionChange">
+                            <el-tag size="small" style="margin-bottom: 5px;margin-right: 5px" >
+                                <span  v-for="(item, key) in form.serviceModulesName" :key="key"> {{item.key===permission.serviceModule? item.value:''}} </span>
+                            </el-tag>
+                            {{permission.name }}
+                        </el-checkbox>
+                    </el-checkbox-group>
                 </el-descriptions-item>
             </el-descriptions>
         </div>
@@ -99,7 +97,7 @@ export default defineComponent({
             },
             query:{
                 permissionKey:'',
-                serviceKey:store.state.dict.sysDict.all.serviceModulesName[0].key
+                serviceKey:store.state.user.services[0]
             },
             serviceModulesName: store.state.dict.sysDict.all.serviceModulesName
 
@@ -127,6 +125,8 @@ export default defineComponent({
                 }).then(() => {
                     next();
                 }).catch(()=>{})
+            }else {
+                next();
             }
             if(form.isSave){
                 to.query  ={isAddOrEdit:form.isSave};
@@ -209,7 +209,10 @@ export default defineComponent({
          * 查询所有权限
          */
         const selectPermissionAll = () =>{
-            store.dispatch('permission/selectPermissionAll').then(res => {
+            let queryPermission = {
+                isRole:'0'
+            };
+            store.dispatch('permission/selectPermissionAll',queryPermission).then(res => {
                 form.permissions_copy = res.data;
                 selectPermissionKey();
             })
@@ -242,9 +245,9 @@ export default defineComponent({
     flex-direction: column;
     box-sizing: border-box;
     .operation-top {
-        height: 180px;
+        height: 120px;
         margin: 5px 5px 0px 5px;
-        min-height: 100px;
+        min-height: 120px;
         overflow-y: auto;
         .operation-top-form{
             width: 100%;
@@ -263,6 +266,7 @@ export default defineComponent({
     .operation-bottom{
         height: calc(100%);
         margin: 5px 5px 5px 5px;
+        min-height: 350px;
         overflow-y: auto;
         :deep() {
             .el-descriptions__header{
@@ -325,57 +329,18 @@ export default defineComponent({
             }
         }
     }
-    .user-div-row{
-        height: 450px;
-        overflow: auto;
-        &::-webkit-scrollbar {
-            display: none;
-            width: 6px;
-        }
-        &::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            background: rgba(144, 147, 153, 0.3);
-        }
-        //鼠标悬浮显示滚动条
-        &:hover {
-            &::-webkit-scrollbar {
-                display: block;
-            }
-            &::-webkit-scrollbar-thumb {
-                border-radius: 10px;
-                background: rgba(144, 147, 153, 0.3);
-                &:hover {
-                    background: rgba(144, 147, 153, 0.5);
-                }
-            }
-        }
+    &::-webkit-scrollbar {
+        display: none;
+        width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background: rgba(144, 147, 153, 0.3);
     }
     .operation-top,.operation-bottom{
         background-color: var(--system-container-main-background);
         color: var(--system-page-color);
         padding: 5px;
-        width: calc(100% - 20px);
-        &::-webkit-scrollbar {
-            display: none;
-            width: 6px;
-        }
-        &::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            background: rgba(144, 147, 153, 0.3);
-        }
-        //鼠标悬浮显示滚动条
-        &:hover {
-            &::-webkit-scrollbar {
-                display: block;
-            }
-            &::-webkit-scrollbar-thumb {
-                border-radius: 10px;
-                background: rgba(144, 147, 153, 0.3);
-                &:hover {
-                    background: rgba(144, 147, 153, 0.5);
-                }
-            }
-        }
     }
 }
 </style>

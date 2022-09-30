@@ -1,7 +1,7 @@
 import { getSysParamConfigApi,updateParamConfigApi } from '@/api/sys/paramConfig'
 import { sendNotification } from '@/utils/system/toolUtils'
 const state = () => ({
-})
+});
 
 // getters
 const getters = {

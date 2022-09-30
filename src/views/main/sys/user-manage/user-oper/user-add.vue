@@ -140,6 +140,8 @@ export default defineComponent({
                 }).then(() => {
                     next();
                 }).catch(()=>{})
+            }else {
+                next();
             }
             if(form.isSave){
                 to.query  ={isAddOrEdit:form.isSave};
@@ -234,6 +236,7 @@ export default defineComponent({
         height: 185px;
         margin: 5px 5px 0px 5px;
         overflow-y: auto;
+        min-height: 185px;
         .operation-top-form{
             width: 100%;
             height:  calc(100% - 75px);
@@ -251,9 +254,10 @@ export default defineComponent({
     .operation-bottom{
         height: calc(100% - 200px);
         margin: 5px 5px 5px 5px;
+        min-height: 300px;
         overflow-y: auto;
         .demo-tabs{
-            height:  calc(100% - 55px);
+            height:  calc(100% - 60px);
             overflow-y: auto;
             .tab-tree-body{
                 height: 400px;
@@ -267,34 +271,25 @@ export default defineComponent({
                     background: rgba(144, 147, 153, 0.3);
                 }
             }
+            :deep(){
+                .el-tabs__content{
+                    height:  calc(100% - 10px) !important;
+                }
+            }
         }
     }
     .operation-top,.operation-bottom,.demo-tabs{
         background-color: var(--system-container-main-background);
         color: var(--system-page-color);
         padding: 5px;
-        width: calc(100% - 20px);
-        &::-webkit-scrollbar {
-            display: none;
-            width: 6px;
-        }
-        &::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            background: rgba(144, 147, 153, 0.3);
-        }
-        //鼠标悬浮显示滚动条
-        &:hover {
-            &::-webkit-scrollbar {
-                display: block;
-            }
-            &::-webkit-scrollbar-thumb {
-                border-radius: 10px;
-                background: rgba(144, 147, 153, 0.3);
-                &:hover {
-                    background: rgba(144, 147, 153, 0.5);
-                }
-            }
-        }
+    }
+    &::-webkit-scrollbar {
+        display: none;
+        width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background: rgba(144, 147, 153, 0.3);
     }
 }
 </style>

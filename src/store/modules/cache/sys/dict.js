@@ -1,4 +1,5 @@
 import { getModulesAllGroupDictKeyValueApi } from '@/api/sys/dict'
+import { sendNotification } from '@/utils/system/toolUtils'
 const state = () => ({
   sysDict: '' // 系统字典
 });
@@ -23,12 +24,18 @@ const actions = {
   /**
    * 获取系统模块组全部字典键值
    * @param commit
+   * @returns {Promise<any>} resolve 正常返回数据 reject 返回异常数据
+   * 如果调用者需要 finally 则需要返回  reject(error) 不然 finally 将会失效
    */
   getModulesAllGroupDictKeyValue({ commit }) {
-    getModulesAllGroupDictKeyValueApi().then(res => {
-      commit('sysDictChange', res.data)
-    }).catch(error =>{
-      console.log(error)
+    return new Promise((resolve, reject) => {
+      getModulesAllGroupDictKeyValueApi().then(res => {
+        commit('sysDictChange', res.data);
+        resolve(res)
+      }).catch(error =>{
+        sendNotification(error.msg,error.type,3000);
+        reject(error)
+      })
     })
   }
 };

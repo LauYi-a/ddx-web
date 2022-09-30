@@ -283,7 +283,7 @@ export default defineComponent({
     .operation-top{
         height: 225px;
         margin: 5px 5px 0px 5px;
-        min-height: 150px;
+        min-height: 225px;
         overflow-y: auto;
         .operation-top-form{
             width: 100%;
@@ -302,7 +302,7 @@ export default defineComponent({
     .operation-bottom{
         height: calc(100% - 240px);
         margin: 5px 5px 5px 5px;
-        min-height: 150px;
+        min-height: 300px;
         overflow-y: auto;
         .demo-tabs{
             height:  calc(100% - 60px);
@@ -320,35 +320,25 @@ export default defineComponent({
                     background: rgba(144, 147, 153, 0.3);
                 }
             }
+            :deep(){
+                .el-tabs__content{
+                    height:  calc(100% - 10px) !important;
+                }
+            }
         }
     }
     .operation-top,.operation-bottom,.demo-tabs{
         background-color: var(--system-container-main-background);
         color: var(--system-page-color);
         padding: 5px;
-        width: calc(100% - 20px);
-        &::-webkit-scrollbar {
-            display: none;
-            width: 6px;
-        }
-        &::-webkit-scrollbar-thumb {
-            border-radius: 10px;
-            background: rgba(144, 147, 153, 0.3);
-        }
-        //鼠标悬浮显示滚动条
-        &:hover {
-            &::-webkit-scrollbar {
-                display: block;
-            }
-            &::-webkit-scrollbar-thumb {
-                border-radius: 10px;
-                background: rgba(144, 147, 153, 0.3);
-                &:hover {
-                    background: rgba(144, 147, 153, 0.5);
-                }
-            }
-        }
     }
-
+    &::-webkit-scrollbar {
+        display: none;
+        width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background: rgba(144, 147, 153, 0.3);
+    }
 }
 </style>

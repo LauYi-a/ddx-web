@@ -8,6 +8,20 @@ import { createNameComponent } from '../createNode'
  * */
 const route = [
   {
+    path: '/sys/whitelist/add',
+    component: Layout,
+    redirect: '/sys/whitelist/whitelistAdd',
+    hideMenu: true,
+    meta: { title: '新增白名单' },
+    children: [
+      {
+        path: '/sys/whitelist/whitelistAdd',
+        component: createNameComponent(() => import('@/views/main/sys/whitelist/whitelist-add.vue')),
+        meta: { title: '新增白名单信息', hideTabs: true }
+      }
+    ]
+  },
+  {
     path: '/sys/role/edit',
     component: Layout,
     redirect: '/sys/role/roleEdit',
@@ -130,12 +144,12 @@ const route = [
   {
     path: '/401',
     component: Layout,
-    redirect: '/401',
+    redirect: '/system/401',
     hideMenu: true,
     meta: { title: '系统目录' },
     children: [
       {
-        path: '/401',
+        path: '/system/401',
         component: createNameComponent(() => import('@/views/system/401.vue')),
         meta: { title: '401', hideTabs: true }
       },

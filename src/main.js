@@ -11,6 +11,7 @@ import { ElCollapseTransition } from 'element-plus'
 import App from './App.vue'
 import store from './store'
 import router from './router'
+import dialogDrag  from './directive/drag/dialogDrag'
 import has from './directive/permission/has'
 const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
@@ -21,6 +22,7 @@ app.use(store)
 app.use(ElNotification)
 app.use(router)
 app.use(has)
+app.use(dialogDrag)
 app.use(ElCollapseTransition)
 app.use(animated)
 app.mount('#app')

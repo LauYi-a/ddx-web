@@ -79,30 +79,28 @@
           background:var(--system-primary-color);
           color: var(--system-primary-text-color);
         }
-        .is-scrolling-left,.is-scrolling-middle,.is-scrolling-right{
-          &::-webkit-scrollbar {
-            display: none;
-            width: 6px;
-            height: 10px;
-            border-radius: 5px;
+        .el-table{
+          .el-table__fixed, .el-table__fixed-right {
+            height: 100% !important;
           }
-          &::-webkit-scrollbar-thumb {
-            border-radius: 5px;
-            background: rgba(144, 147, 153, 0.3);
-          }
-          &:hover {
-            &::-webkit-scrollbar {
-              display: block;
-            }
-            &::-webkit-scrollbar-thumb {
-              border-radius: 5px;
-              background: rgba(144, 147, 153, 0.3);
-              &:hover {
-                background: rgba(144, 147, 153, 0.5);
+          &.el-table--fluid-height {
+            &.el-table--scrollable-y{
+              .el-table__fixed-body-wrapper{
+                bottom:1px;
+                max-height: none !important;
+              }
+              &.el-table--scrollable-x{
+                .el-table__fixed-body-wrapper{
+                  bottom:18.5px; // 这里的高度如果写的比较小 ie会不兼容
+                  max-height: none !important;
+                }
               }
             }
           }
         }
+      }
+      .el-table__fixed-right-patch{
+        background:var(--system-primary-color);
       }
       .table-page{
         height: 40px;
@@ -161,10 +159,6 @@
         &::-webkit-scrollbar {
           display: none;
           width: 6px;
-        }
-        &::-webkit-scrollbar-thumb {
-          border-radius: 10px;
-          background: rgba(144, 147, 153, 0.3);
         }
       }
     }
@@ -267,17 +261,6 @@ a {
   &::before {
     content: "▍";
     color: var(--system-page-color);
-  }
-}
-//滚动栏
-body{
-  &::-webkit-scrollbar {
-    display: none;
-    width: 6px;
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 10px;
-    background: rgba(144, 147, 153, 0.3);
   }
 }
 //页面滚动栏

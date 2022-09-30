@@ -39,13 +39,14 @@
 </template>
 
 <script>
-import { defineComponent, computed, onBeforeMount } from "vue";
+import { defineComponent, computed, onBeforeMount,onMounted } from "vue";
 import { useStore } from "vuex";
 import { useEventListener } from "@vueuse/core";
 import Menu from "./Menu/index.vue";
 import Logo from "./Logo/index.vue";
 import Header from "./Header/index.vue";
 import Tabs from "./Tabs/index.vue";
+import { ElLoading } from 'element-plus'
 export default defineComponent({
   components: {
     Menu,
@@ -71,17 +72,24 @@ export default defineComponent({
     };
     //初始化数据
     const initData = () =>{
-      setTimeout(() => {
-        store.dispatch('dict/getModulesAllGroupDictKeyValue')
-      }, 2000);
+      const loading =  ElLoading.service({
+        lock: true,
+        text: '正在初始化缓存数据...',
+        background: 'rgba(0,0,0,0.3)',
+      });
+      store.dispatch('dict/getModulesAllGroupDictKeyValue').then(()=>{}).finally(() =>{
+        loading.close()
+      })
     };
     // 初始化调用
     resizeHandler();
-    initData();
     // beforeMount
     onBeforeMount(() => {
       // 监听页面变化
       useEventListener("resize", resizeHandler);
+    });
+    onMounted(()=>{
+      initData();
     });
     // methods
     // 隐藏菜单

@@ -37,7 +37,7 @@
                                 v-model:currentPage="form.query.page"
                                 v-model:page-size="form.query.perPage"
                                 v-model:total="form.total"
-                                :page-sizes="[10, 20, 30, 40]"
+                                :page-sizes="[15, 20, 30, 40]"
                                 :background="true"
                                 layout="total,prev,pager,next,sizes"
                                 @size-change="handleSizeChange"
@@ -86,7 +86,7 @@ import { defineComponent,ref, reactive,onMounted,watch } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { encrypt} from '@/utils/system/cryptoAES'
-import { formatterDict} from '@/utils/sys/dictUtils'
+import { formatterDictVal} from '@/utils/sys/dictUtils'
 import { arrayIdList,validationMultipleSelection} from '@/utils/system/toolUtils'
 import closeImages from "@/assets/images/colseSearch.png"
 import openImages from "@/assets/images/openSearch.png"
@@ -110,7 +110,7 @@ export default defineComponent({
             total:0,
             query:{
                 page:1,
-                perPage:10,
+                perPage:15,
                 name:'',
                 code:'',
                 status:''
@@ -136,7 +136,7 @@ export default defineComponent({
         };
         //表格格式化
         const formatter = (row) =>{
-            return formatterDict(store.state.dict.sysDict.sys.roleStatus,row.status)
+            return formatterDictVal(store.state.dict.sysDict.sys.roleStatus,row.status)
         };
         //监听路由变化刷新列表
         watch(()=>router.currentRoute.value.query, (newValue) => {
@@ -168,6 +168,7 @@ export default defineComponent({
         const handleSelectChange = () =>{
             form.query.page = 1;
             form.isSelectLoad = true;
+            form.tableLoading = true;
             selectDataList();
         };
         /**
@@ -176,8 +177,9 @@ export default defineComponent({
         const handleClearChange = () =>{
             form.query = {};
             form.query.page = 1;
-            form.query.perPage = 10;
+            form.query.perPage = 15;
             form.isClearLoad = true;
+            form.tableLoading = true;
             selectDataList();
         };
         /**
@@ -191,12 +193,13 @@ export default defineComponent({
          * @param val
          */
         const handleSizeChange = (val) => {
-            form.query.page = val;
+            form.query.perPage = val;
+            form.tableLoading = true;
             selectDataList();
         };
         const handleCurrentChange = (val) => {
-            form.query.page = 1;
-            form.query.perPage = val;
+            form.query.page = val;
+            form.tableLoading = true;
             selectDataList();
         };
         /**
