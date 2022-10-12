@@ -239,7 +239,7 @@ const actions = {
     loginOutApi().then(res => {})
     .catch(error =>{})
     .finally(() => {
-      localStorage.clear()
+      localStorage.clear();
       location.reload()
     })
   }

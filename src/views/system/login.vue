@@ -6,7 +6,7 @@
         <el-input
           size="large"
           v-model="form.username"
-          placeholder="用户名"
+          placeholder="用户账号/手机号"
           type="text"
           maxlength="50"
         >
