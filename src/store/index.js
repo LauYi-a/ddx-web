@@ -3,7 +3,7 @@ import Presistent from './plugins/persistent'
 const debug = process.env.NODE_ENV !== 'production';
 
 const files= import.meta.globEager('./modules/*.js');
-const sysFiles= import.meta.globEager('./modules/cache/sys/*.js');
+const sysFiles= import.meta.globEager('./modules/sys/*.js');
 
 let modules = {};
 Object.keys(files).forEach((c) => {

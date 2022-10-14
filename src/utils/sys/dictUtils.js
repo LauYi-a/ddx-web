@@ -9,17 +9,13 @@ export function formatterDictVal(dictKeyVal,value){
     if(dictKeyVal){
         for (let index = 0; index < dictKeyVal.length; index++) {
             let dict =  dictKeyVal[index]
-            if (value == dict.key) {
+            if (value === dict.key) {
                 fmtValue = dict.value;
                 break;
             }
         }
     }
-    if(fmtValue){
-        return fmtValue
-    }else{
-        return value
-    }
+    return fmtValue
 }
 
 /**
@@ -38,9 +34,5 @@ export function formatterDictDesc(dictKeyVal,value){
             }
         }
     }
-    if(fmtValue){
-        return fmtValue
-    }else{
-        return value
-    }
+    return fmtValue
 }

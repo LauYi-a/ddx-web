@@ -61,6 +61,11 @@
                                     <el-option v-for="item in form.serviceModule" :key="item.key"  :label="item.value" :value="item.key"  />
                                 </el-select>
                             </el-form-item>
+                            <el-form-item label="是否授权角色" prop="isRole">
+                                <el-select v-model="form.query.isRole" placeholder="请选择是否授权角色" size="mini" clearable style="width: 100%;">
+                                    <el-option v-for="item in form.isRolePermission" :key="item.key"  :label="item.value" :value="item.key"  />
+                                </el-select>
+                            </el-form-item>
                         </el-form>
                     </div>
                 </div>
@@ -123,7 +128,8 @@ export default defineComponent({
                 perPage:15,
                 name:'',
                 url:'',
-                serviceModule:''
+                serviceModule:'',
+                isRole:''
             },
             update:{
                 id:'',

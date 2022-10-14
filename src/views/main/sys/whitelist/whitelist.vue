@@ -24,7 +24,6 @@
                                         <el-icon class="more-operation-icon"><MoreFilled /></el-icon>
                                         <template #dropdown>
                                             <el-dropdown-menu>
-                                                <el-dropdown-item @click="handleToEditChange(scope.row)" v-has="'edit'"><el-icon><Edit /></el-icon> 编 辑 </el-dropdown-item>
                                                 <el-dropdown-item @click="handleDeleteChange(scope.row.id)" v-has="'delete'"><el-icon><Edit /></el-icon> 删 除 </el-dropdown-item>
                                             </el-dropdown-menu>
                                         </template>
@@ -188,12 +187,7 @@ export default defineComponent({
         const handleToAddChange = () =>{
             router.push('/sys/whitelist/add')
         };
-        /**
-         * 编辑权限
-         */
-        const handleToEditChange = (row) =>{
 
-        };
         /**
          * 删除
          */
@@ -265,7 +259,6 @@ export default defineComponent({
             handleClearChange,
             handleSizeChange,
             handleCurrentChange,
-            handleToEditChange,
             handleToAddChange,
             handleSelectionChange,
             handleDeleteChange,

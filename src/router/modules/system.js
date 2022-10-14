@@ -8,6 +8,20 @@ import { createNameComponent } from '../createNode'
  * */
 const route = [
   {
+    path: '/sys/resource/edit',
+    component: Layout,
+    redirect: '/sys/resource/resourceList',
+    hideMenu: true,
+    meta: { title: '新增白名单' },
+    children: [
+      {
+        path: '/sys/resource/resourceList',
+        component: createNameComponent(() => import('@/views/main/sys/user-manage/resource-oper/resource-edit.vue')),
+        meta: { title: '新增白名单信息', hideTabs: true }
+      }
+    ]
+  },
+  {
     path: '/sys/whitelist/add',
     component: Layout,
     redirect: '/sys/whitelist/whitelistAdd',

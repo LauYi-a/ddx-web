@@ -17,3 +17,21 @@ export function selectUserResourceIdsApi(data) {
         data:data
     })
 }
+// 查询系统资源树列表
+export function selectMenuTreeListApi(data) {
+    return request({
+        url: '/sys-resource/select-menu-tree-list',
+        method: 'post',
+        baseURL: '/ddx/sys',
+        data:data
+    })
+}
+// 编辑资源菜单
+export function resourceEditApi(data) {
+    return request({
+        url: '/sys-resource/edit',
+        method: 'post',
+        baseURL: '/ddx/sys',
+        data:data
+    })
+}
