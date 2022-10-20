@@ -41,7 +41,7 @@
                                 v-model:currentPage="form.query.page"
                                 v-model:page-size="form.query.perPage"
                                 v-model:total="form.total"
-                                :page-sizes="[15, 20, 30, 40]"
+                                :page-sizes="form.pageSizes"
                                 :background="true"
                                 layout="total,prev,pager,next,sizes"
                                 @size-change="handleSizeChange"
@@ -79,7 +79,7 @@
             </div>
             <div class="table-body-bottom">
                 <el-button title="新增用户信息" type="primary" @click="handleToAddChange" v-has="'create'">新增</el-button>
-                <el-popconfirm title="是否确定需要删除选择数据？" confirm-button-text="确定" cancel-button-text="取消" @confirm="handleBatchDeleteChange">
+                <el-popconfirm title="确定是否需要批量删除选择的数据？" confirm-button-text="确定" cancel-button-text="取消" @confirm="handleBatchDeleteChange">
                     <template #reference>
                         <el-button title="批量删除用户" type="primary" :loading="form.isBatchDeleteLoad" v-has="'batch_delete'">批量删除</el-button>
                     </template>
@@ -95,30 +95,32 @@
 import { defineComponent,ref, reactive,onMounted ,watch} from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { formatterDictVal} from '@/utils/sys/dictUtils'
+import dictUtils from '@/utils/sys/dictUtils'
 import { encrypt} from '@/utils/system/cryptoAES'
 import closeImages from "@/assets/images/colseSearch.png"
 import openImages from "@/assets/images/openSearch.png"
-import { arrayIdList,validationMultipleSelection,sendNotification} from '@/utils/system/toolUtils'
+import toolUtils from '@/utils/system/toolUtils'
+import api from '@/store/noCacheModules/index'
 export default defineComponent({
     setup() {
         const store = useStore();
         const router = useRouter();
         const iconIsShow = ref(false);
         const form = reactive({
-            leftSize:'15%',
-            rightSize:'85%',
-            marginLeft:'5px',
-            display:'hidden',
+            leftSize:store.state.app.tableSelect.leftSize,
+            rightSize:store.state.app.tableSelect.rightSize,
+            marginLeft:store.state.app.tableSelect.marginLeft,
+            display:store.state.app.tableSelect.display,
             isSelectLoad:false,
             isBatchDeleteLoad:false,
             isClearLoad:false,
             tableLoading:true,
             userStatus: store.state.dict.sysDict.sys.userStatus,
-            total:0,
+            total:store.state.app.tableQuery.total,
+            pageSizes:store.state.app.tableQuery.pageSizes,
             query:{
-                page:1,
-                perPage:15,
+                page:store.state.app.tableQuery.page,
+                perPage:store.state.app.tableQuery.perPage,
                 username:'',
                 nickname:'',
                 mobile:'',
@@ -130,10 +132,10 @@ export default defineComponent({
         });
         //打开搜索栏
         const open = (value) =>{
-            form.leftSize = '15%';
-            form.rightSize = '85%';
-            form.display = 'hidden';
-            form.marginLeft = '5px';
+            form.leftSize = store.state.app.tableSelect.leftSize;
+            form.rightSize = store.state.app.tableSelect.rightSize;
+            form.marginLeft = store.state.app.tableSelect.marginLeft;
+            form.display = store.state.app.tableSelect.display;
             iconIsShow.value = value;
         };
         //关闭搜索栏
@@ -146,15 +148,15 @@ export default defineComponent({
         };
         //性别格式化
         const genderFormatter = (row) =>{
-            return formatterDictVal(store.state.dict.sysDict.sys.userGender,row.gender)
+            return dictUtils.formatterDictVal(store.state.dict.sysDict.sys.userGender,row.gender)
         };
         //状态格式化
         const statusFormatter = (row) =>{
-            return formatterDictVal(store.state.dict.sysDict.sys.userStatus,row.status)
+            return dictUtils.formatterDictVal(store.state.dict.sysDict.sys.userStatus,row.status)
         };
         //服务名称格式化
         const serviceFormatter = (row) =>{
-            return formatterDictVal(store.state.dict.sysDict.all.serviceModulesName,row.loginService)
+            return dictUtils.formatterDictVal(store.state.dict.sysDict.all.serviceModulesName,row.loginService)
         };
         //监听路由变化刷新列表
         watch(()=>router.currentRoute.value.query, (newValue) => {
@@ -170,7 +172,7 @@ export default defineComponent({
          * 列表数据查询
          */
         const selectDataList = () => {
-            store.dispatch('user/selectUserList',form.query).then(res =>{
+            api.user.selectUserList(form.query).then(res =>{
                 form.tableData = res.data.resultData;
                 form.query.page = res.data.currentPage;
                 form.total = res.data.totalCount;
@@ -204,7 +206,7 @@ export default defineComponent({
          * 表格多选框
          */
         const handleSelectionChange = (val) =>{
-            form.multipleSelection = arrayIdList(val,'id');
+            form.multipleSelection = toolUtils.arrayIdList(val,'id');
         };
         /**
          * 分页操作方法
@@ -224,10 +226,10 @@ export default defineComponent({
          * 批量删除
          */
         const handleBatchDeleteChange = () =>{
-            form.isBatchDeleteLoad = validationMultipleSelection(form.multipleSelection);
+            form.isBatchDeleteLoad = toolUtils.validationMultipleSelection(form.multipleSelection);
             if (form.isBatchDeleteLoad) {
-                store.dispatch('user/batchDeleteUserInfoByIds',{keyWords:form.multipleSelection}).then(res =>{
-                    sendNotification(res.msg,res.type,3000);
+                api.user.batchDeleteUserInfoByIds({keyWords:form.multipleSelection}).then(res =>{
+                    toolUtils.sendNotification(res.msg,res.type,3000);
                     selectDataList();
                 }).finally(()=>{
                     form.isBatchDeleteLoad = false
@@ -238,8 +240,8 @@ export default defineComponent({
          * 删除
          */
         const handleDeleteChange = (id) =>{
-            store.dispatch('user/deleteUserInfoById',{keyWord:id}).then(res =>{
-                sendNotification(res.msg,res.type,3000);
+            api.user.deleteUserInfoById({keyWord:id}).then(res =>{
+                toolUtils.sendNotification(res.msg,res.type,3000);
                 selectDataList();
             })
         };

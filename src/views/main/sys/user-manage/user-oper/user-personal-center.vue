@@ -206,7 +206,8 @@
 import { defineComponent, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { sendNotification } from '@/utils/system/toolUtils'
+import toolUtils from '@/utils/system/toolUtils'
+import api from '@/store/noCacheModules/index'
 export default defineComponent({
     setup() {
         const store = useStore();
@@ -300,7 +301,7 @@ export default defineComponent({
                     form.rolePermission = rolePermission_temp;
                 }
             }else{
-                sendNotification('请点击选择角色后在进行搜索','warning',3000);
+                toolUtils.sendNotification('请点击选择角色后在进行搜索','warning',3000);
             }
         };
         //加载用户菜单
@@ -332,20 +333,20 @@ export default defineComponent({
                     }
                 })
             }else{
-                sendNotification('无菜单可以进行筛选','warning',3000);
+                toolUtils.sendNotification('无菜单可以进行筛选','warning',3000);
             }
         };
         //获取用户详细信息
         const getUserInfoById = () => {
-            store.dispatch('user/getUserInfoById').then(res =>{
+            api.user.getUserInfoById().then(res =>{
                 form.user = res.data;
                 loadUserMenu(res.data.resource.treeMenu);
             })
         };
         //保存修改用户信息
         const saveUserInfo =() =>{
-            store.dispatch('user/updateByUserId',form.updateUserInfo).then(res =>{
-                sendNotification(res.msg,res.type,3000);
+            api.user.updateByUserId(form.updateUserInfo).then(res =>{
+                toolUtils.sendNotification(res.msg,res.type,3000);
                 form.isEdit = false;
                 getUserInfoById();
             })

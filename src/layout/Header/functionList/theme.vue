@@ -9,8 +9,8 @@
                size="300px"
                :show-close="false"
                direction="rtl">
-           <h3>整体风格设置</h3>
            <div class="theme-box">
+               <h3>整体风格设置</h3>
                <theme-icon
                        v-model:active="state.style"
                        v-for="(row, index) in style"
@@ -23,9 +23,7 @@
                        :main="row.container.background"
                        :activeColor="row.page.color"
                ></theme-icon>
-           </div>
-           <h3>主题色</h3>
-           <div class="theme-box">
+               <h3>主题色</h3>
                <theme-color
                        v-for="(item, key) in themeColorArr"
                        v-model:active="state.primaryColor"
@@ -35,19 +33,22 @@
                        :textColor="item.textColor"
                        :tip="item.tip"
                ></theme-color>
-           </div>
-           <h3>其他设置</h3>
-           <div class="list">
-               <div class="list-item" v-for="option in options" :key="option.name">
-                   <span>{{ option.name }}</span>
-                   <el-switch
-                           v-model="option.value"
-                           active-color="var(--system-primary-color)"
-                           inactive-color="#ff4949"
-                           @change="change(option)"
-                   >
-                   </el-switch>
+               <h3>其他设置</h3>
+               <div class="list">
+                   <div class="list-item" v-for="option in options" :key="option.name">
+                       <span>{{ option.name }}</span>
+                       <el-switch
+                               v-model="option.value"
+                               active-color="var(--system-primary-color)"
+                               inactive-color="#ff4949"
+                               @change="change(option)"
+                       >
+                       </el-switch>
+                   </div>
                </div>
+           </div>
+           <div class="theme-footer">
+               <el-button @click="drawer = false">关 闭</el-button>
            </div>
        </el-drawer>
    </div>
@@ -135,13 +136,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-  i {
-    cursor: pointer;
-    &:focus {
-      outline: none;
-    }
-  }
-  
   .list {
     padding: 0 20px;
     &-item {
@@ -154,38 +148,9 @@ export default defineComponent({
       }
     }
   }
-  h3 {
-    margin-top: 40px;
-    margin-bottom: 20px;
-    color: var(--system-page-color);
-    font-size: 14px;
-    line-height: 22px;
-    text-align: left;
-    padding: 0 20px;
-    &:first-child {
-      margin-top: 0;
-    }
-  }
-  .theme-box {
-    text-align: left;
-    padding-left: 20px;
-  }
   .header-icon{
       font-size: 17px;
       display: flex;
       align-items: center;
-  }
-  .drawer-box{
-      :deep() {
-         .el-drawer{
-             background: var(--system-page-background);
-         }
-          .el-drawer__header{
-              color: var(--system-page-color);
-          }
-          .list-item{
-              color: var(--system-page-color);
-          }
-      }
   }
 </style>

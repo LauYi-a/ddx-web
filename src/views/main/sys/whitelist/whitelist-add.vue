@@ -74,8 +74,9 @@ import { defineComponent,ref, reactive,onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter,onBeforeRouteLeave } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
-import { sendNotification } from '@/utils/system/toolUtils'
+import toolUtils from '@/utils/system/toolUtils'
 import ok from "@/assets/images/add.png"
+import api from '@/store/noCacheModules/index'
 export default defineComponent({
     setup() {
         const ruleForm = ref(null);
@@ -137,8 +138,8 @@ export default defineComponent({
                 ruleForm.value.validate((valid) => {
                     if (valid) {
                         form.isLoad = false;
-                        store.dispatch('whitelist/whitelistAdd',form.whitelistInfo).then(res => {
-                            sendNotification(res.msg,res.type,3000);
+                        api.whitelist.whitelistAdd(form.whitelistInfo).then(res => {
+                            toolUtils.sendNotification(res.msg,res.type,3000);
                             form.isSave = true;
                             router.back();
                         }).finally(()=>{
@@ -181,7 +182,7 @@ export default defineComponent({
          */
         const selectPermissionAll = () =>{
             let queryPermission = {};
-            store.dispatch('permission/selectPermissionAll',queryPermission).then(res => {
+            api.permission.selectPermissionAll(queryPermission).then(res => {
                 form.permissions = res.data;
             })
         };

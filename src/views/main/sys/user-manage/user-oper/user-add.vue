@@ -87,8 +87,9 @@ import { defineComponent,ref, reactive,onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter,onBeforeRouteLeave } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
-import { sendNotification } from '@/utils/system/toolUtils'
+import toolUtils from '@/utils/system/toolUtils'
 import ok from "@/assets/images/add.png"
+import api from '@/store/noCacheModules/index'
 export default defineComponent({
     setup() {
         const ruleForm = ref(null);
@@ -171,12 +172,12 @@ export default defineComponent({
                 ruleForm.value.validate((valid) => {
                     if (valid) {
                         if(form.userInfo.resourceIds.length === 0){
-                            sendNotification('请选择菜单后进行保存','warning',3000);
+                            toolUtils.sendNotification('请选择菜单后进行保存','warning',3000);
                             return false;
                         }
                         form.isLoad = false;
-                        store.dispatch('user/userAdd',form.userInfo).then(res => {
-                            sendNotification(res.msg,res.type,3000);
+                        api.user.userAdd(form.userInfo).then(res => {
+                            toolUtils.sendNotification(res.msg,res.type,3000);
                             form.isSave = true;
                             router.back();
                         }).finally(()=>{
@@ -192,7 +193,7 @@ export default defineComponent({
          * 查询所有角色键值
          */
         const selectRoleKyeAndValAll = () => {
-            store.dispatch('role/selectRoleKyeAndValAll').then(res => {
+            api.role.selectRoleKyeAndValAll().then(res => {
                 form.roleList = res.data;
             })
         };
@@ -200,7 +201,7 @@ export default defineComponent({
          * 查询资源菜单树
          */
         const selectMenuTree = () =>{
-            store.dispatch('resource/selectMenuTree').then(res => {
+            api.resource.selectMenuTree().then(res => {
                 form.resourceList = res.data;
                 form.activeTabName = res.data[0].serviceCode;
             })

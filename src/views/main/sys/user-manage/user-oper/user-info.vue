@@ -209,7 +209,7 @@ import { defineComponent,reactive,onUnmounted,onMounted } from 'vue'
 import { decrypt} from '@/utils/system/cryptoAES'
 import { useRoute,useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import { sendNotification } from '@/utils/system/toolUtils'
+import toolUtils from '@/utils/system/toolUtils'
 export default defineComponent({
     setup() {
         const route = useRoute();
@@ -289,7 +289,7 @@ export default defineComponent({
                     }
                 })
             }else{
-                sendNotification('该用户无菜单可以筛选','warning',3000);
+                toolUtils.sendNotification('该用户无菜单可以筛选','warning',3000);
             }
         };
         //点击角色
@@ -322,7 +322,7 @@ export default defineComponent({
                     form.rolePermission = rolePermission_temp;
                 }
             }else{
-                sendNotification('请点击选择角色后在进行搜索','warning',3000);
+                toolUtils.sendNotification('请点击选择角色后在进行搜索','warning',3000);
             }
         };
         // 组件挂载到页面之后执行

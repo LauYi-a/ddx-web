@@ -100,7 +100,7 @@ import { useStore } from 'vuex'
 import { useRouter,useRoute,onBeforeRouteLeave } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
 import { decrypt} from '@/utils/system/cryptoAES'
-import { sendNotification } from '@/utils/system/toolUtils'
+import toolUtils from '@/utils/system/toolUtils'
 import ok from "@/assets/images/ok.ico"
 export default defineComponent({
     setup() {
@@ -175,8 +175,8 @@ export default defineComponent({
                 ruleForm.value.validate((valid) => {
                     if (valid) {
                         form.isLoad = false;
-                        store.dispatch('resource/resourceEdit',form.resourceInfo).then(res => {
-                            sendNotification(res.msg,res.type,3000);
+                        api.resource.resourceEdit(form.resourceInfo).then(res => {
+                            toolUtils.sendNotification(res.msg,res.type,3000);
                             form.isSave = true;
                             router.back();
                         }).finally(()=>{

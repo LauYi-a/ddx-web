@@ -48,6 +48,7 @@ import PasswordLayer from './passwordLayer.vue'
 import { useRouter } from 'vue-router'
 import { ElLoading } from 'element-plus'
 import { decrypt} from '@/utils/system/cryptoAES'
+import api from '@/store/noCacheModules/index'
 export default defineComponent({
   components: {
     FullScreen,
@@ -92,7 +93,7 @@ export default defineComponent({
         text: '正在退出系统...',
         background: 'rgba(0,0,0,0.3)',
       });
-      store.dispatch('user/loginOut')
+      api.user.loginOut()
     };
     
     const showPasswordLayer = () => {

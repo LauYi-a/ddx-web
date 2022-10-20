@@ -44,7 +44,7 @@ import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { addRoutes } from '@/router'
 import { ElNotification } from 'element-plus'
-import { sendNotification } from '@/utils/system/toolUtils'
+import toolUtils from '@/utils/system/toolUtils'
 export default defineComponent({
   setup() {
     const store = useStore();
@@ -100,7 +100,7 @@ export default defineComponent({
         let isOk = false;
         store.dispatch('user/login',params).then(res => {
           store.dispatch('user/getUserMenu',{userId: res.data.user_id,serviceModule:store.state.user.token.loginService}).then(() => {
-            sendNotification(res.msg,res.type,2000);
+            toolUtils.sendNotification(res.msg,res.type,2000);
             addRoutes()
             router.push(route.query.redirect || '/')
           }).finally( ()=>{

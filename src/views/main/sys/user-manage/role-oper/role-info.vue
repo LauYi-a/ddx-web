@@ -109,7 +109,7 @@ import { defineComponent,reactive,onUnmounted } from 'vue'
 import { decrypt} from '@/utils/system/cryptoAES'
 import { useRoute,useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import { sendNotification } from '@/utils/system/toolUtils'
+import toolUtils from '@/utils/system/toolUtils'
 export default defineComponent({
     setup() {
         const route = useRoute();
@@ -158,7 +158,7 @@ export default defineComponent({
                     form.role.rolePermission = rolePermission_temp;
                 }
             }else{
-                sendNotification('无权限可搜索','warning',3000);
+                toolUtils.sendNotification('无权限可搜索','warning',3000);
             }
         };
         //组件卸载之前执行的函数

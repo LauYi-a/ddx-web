@@ -2,8 +2,8 @@ import { createStore, createLogger } from 'vuex'
 import Presistent from './plugins/persistent'
 const debug = process.env.NODE_ENV !== 'production';
 
-const files= import.meta.globEager('./modules/*.js');
-const sysFiles= import.meta.globEager('./modules/sys/*.js');
+const files= import.meta.globEager('./cacheModules/*.js');
+const sysFiles= import.meta.globEager('./cacheModules/sys/*.js');
 
 let modules = {};
 Object.keys(files).forEach((c) => {

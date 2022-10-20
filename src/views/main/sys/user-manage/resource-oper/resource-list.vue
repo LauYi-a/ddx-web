@@ -46,7 +46,7 @@
                     <div class="right-select-body">
                         <el-form label-position="top"  label-width="100px" :modal="form.query" @keyup.enter.native="handleSelectChange">
                             <el-form-item label="服务模块">
-                                <el-select v-model="form.query.serviceModule" placeholder="选择服务模块" size="mini" clearable style="width: 100%;">
+                                <el-select v-model="form.query.serviceModule" placeholder="选择服务模块" size="mini" style="width: 100%;">
                                     <el-option v-for="item in form.serviceModule" :key="item.key"  :label="item.value" :value="item.key"  />
                                 </el-select>
                             </el-form-item>
@@ -66,11 +66,12 @@
 import { defineComponent,ref, reactive,onMounted,watch } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
-import { formatterDictVal} from '@/utils/sys/dictUtils'
+import dictUtils from '@/utils/sys/dictUtils'
 import { menuType } from '@/utils/system/enumUtils'
 import closeImages from "@/assets/images/colseSearch.png"
 import openImages from "@/assets/images/openSearch.png"
 import { encrypt} from '@/utils/system/cryptoAES'
+import api from '@/store/noCacheModules/index'
 export default defineComponent({
     setup() {
         const store = useStore();
@@ -78,10 +79,10 @@ export default defineComponent({
         const ruleForm = ref(null);
         const iconIsShow = ref(false);
         const form = reactive({
-            leftSize:'15%',
-            rightSize:'85%',
-            marginLeft:'5px',
-            display:'hidden',
+            leftSize:store.state.app.tableSelect.leftSize,
+            rightSize:store.state.app.tableSelect.rightSize,
+            marginLeft:store.state.app.tableSelect.marginLeft,
+            display:store.state.app.tableSelect.display,
             isSelectLoad:false,
             isClearLoad:false,
             tableLoading:true,
@@ -103,10 +104,10 @@ export default defineComponent({
         }, { immediate: true });
         //打开搜索栏
         const open = (value) =>{
-            form.leftSize = '15%';
-            form.rightSize = '85%';
-            form.display = 'hidden';
-            form.marginLeft = '5px';
+            form.leftSize = store.state.app.tableSelect.leftSize;
+            form.rightSize = store.state.app.tableSelect.rightSize;
+            form.marginLeft = store.state.app.tableSelect.marginLeft;
+            form.display = store.state.app.tableSelect.display;
             iconIsShow.value = value;
         };
         //关闭搜索栏
@@ -119,34 +120,34 @@ export default defineComponent({
         };
         //表格格式化
         const formatterResourceType = (row) =>{
-            return formatterDictVal(form.menuType,row.resourceType)
+            return dictUtils.formatterDictVal(form.menuType,row.resourceType)
         };
         const formatterServiceModule = (row) =>{
-            return formatterDictVal(form.serviceModule,row.serviceModule)
+            return dictUtils.formatterDictVal(form.serviceModule,row.serviceModule)
         };
         const formatterHideClose = (row) =>{
             if (row.resourceType === menuType.MENU_TYPE_2) {
                 return "-"
             }
-            return formatterDictVal(store.state.dict.sysDict.sys.menuHideClose,row.hideClose)
+            return dictUtils.formatterDictVal(store.state.dict.sysDict.sys.menuHideClose,row.hideClose)
         };
         const formatterHideMenu = (row) =>{
             if (row.resourceType === menuType.MENU_TYPE_2) {
                 return "-"
             }
-            return formatterDictVal(store.state.dict.sysDict.sys.menuHide,row.hideMenu)
+            return dictUtils.formatterDictVal(store.state.dict.sysDict.sys.menuHide,row.hideMenu)
         };
         const formatterHideTabs = (row) =>{
             if (row.resourceType === menuType.MENU_TYPE_2) {
                 return "-"
             }
-            return formatterDictVal(store.state.dict.sysDict.sys.menuHideTabs,row.hideTabs)
+            return dictUtils.formatterDictVal(store.state.dict.sysDict.sys.menuHideTabs,row.hideTabs)
         };
         const formatterCache = (row) =>{
             if (row.resourceType === menuType.MENU_TYPE_2) {
                 return "-"
             }
-            return formatterDictVal(store.state.dict.sysDict.sys.menuCache,row.cache)
+            return dictUtils.formatterDictVal(store.state.dict.sysDict.sys.menuCache,row.cache)
         };
         /**
          * 条件搜索
@@ -160,7 +161,9 @@ export default defineComponent({
          * 重置搜索
          */
         const handleClearChange = () =>{
-            form.query = {};
+            form.query = {
+                serviceModule:store.state.user.services[0]
+            };
             form.isClearLoad = true;
             form.tableLoading = true;
             selectDataList();
@@ -169,7 +172,7 @@ export default defineComponent({
          * 列表数据查询
          */
         const selectDataList = () => {
-            store.dispatch('resource/selectMenuTreeList',form.query).then(res =>{
+            api.resource.selectMenuTreeList(form.query).then(res =>{
                 form.tableData = res.data;
             }).finally(()=>{
                 form.tableLoading = false;

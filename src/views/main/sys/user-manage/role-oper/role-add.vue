@@ -77,8 +77,9 @@ import { defineComponent,ref, reactive,onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter,onBeforeRouteLeave } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
-import { sendNotification } from '@/utils/system/toolUtils'
+import toolUtils from '@/utils/system/toolUtils'
 import ok from "@/assets/images/add.png"
+import api from '@/store/noCacheModules/index'
 export default defineComponent({
     setup() {
         const ruleForm = ref(null);
@@ -142,12 +143,12 @@ export default defineComponent({
                 ruleForm.value.validate((valid) => {
                     if (valid) {
                         if(form.roleInfo.rolePermissionId.length === 0){
-                            sendNotification('请选择权限后进行保存','warning',3000);
+                            toolUtils.sendNotification('请选择权限后进行保存','warning',3000);
                             return false;
                         }
                         form.isLoad = false;
-                        store.dispatch('role/roleAdd',form.roleInfo).then(res => {
-                            sendNotification(res.msg,res.type,3000);
+                        api.role.roleAdd(form.roleInfo).then(res => {
+                            toolUtils.sendNotification(res.msg,res.type,3000);
                             form.isSave = true;
                             router.back();
                         }).finally(()=>{
@@ -180,7 +181,7 @@ export default defineComponent({
                     form.permissions = permission_temp;
                 }
             }else{
-                sendNotification('无权限可搜索','warning',3000);
+                toolUtils.sendNotification('无权限可搜索','warning',3000);
             }
         };
         /**
@@ -212,7 +213,7 @@ export default defineComponent({
             let queryPermission = {
                 isRole:'0'
             };
-            store.dispatch('permission/selectPermissionAll',queryPermission).then(res => {
+            api.permission.selectPermissionAll(queryPermission).then(res => {
                 form.permissions_copy = res.data;
                 selectPermissionKey();
             })

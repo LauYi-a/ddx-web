@@ -35,7 +35,7 @@
                                 v-model:currentPage="form.query.page"
                                 v-model:page-size="form.query.perPage"
                                 v-model:total="form.total"
-                                :page-sizes="[15, 20, 30, 40]"
+                                :page-sizes="form.pageSizes"
                                 :background="true"
                                 layout="total,prev,pager,next,sizes"
                                 @size-change="handleSizeChange"
@@ -90,10 +90,10 @@
                 </el-form-item>
             </el-form>
             <template #footer>
-            <span class="dialog-footer">
-                <el-button @click="form.editDialog = false">取消</el-button>
-                <el-button type="primary" @click="saveEdit" :loading="form.isSaveEdit">提交</el-button>
-            </span>
+                <span class="dialog-footer">
+                    <el-button @click="form.editDialog = false">取消</el-button>
+                    <el-button type="primary" @click="saveEdit" :loading="form.isSaveEdit">提交</el-button>
+                </span>
             </template>
         </el-dialog>
     </div>
@@ -102,30 +102,32 @@
 <script>
 import { defineComponent,ref, reactive,onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { formatterDictVal,formatterDictDesc} from '@/utils/sys/dictUtils'
+import dictUtils from '@/utils/sys/dictUtils'
 import closeImages from "@/assets/images/colseSearch.png"
 import openImages from "@/assets/images/openSearch.png"
-import { sendNotification} from '@/utils/system/toolUtils'
+import toolUtils from '@/utils/system/toolUtils'
+import api from '@/store/noCacheModules/index'
 export default defineComponent({
     setup() {
         const store = useStore();
         const ruleForm = ref(null);
         const iconIsShow = ref(false);
         const form = reactive({
-            leftSize:'15%',
-            rightSize:'85%',
-            marginLeft:'5px',
-            display:'hidden',
+            leftSize:store.state.app.tableSelect.leftSize,
+            rightSize:store.state.app.tableSelect.rightSize,
+            marginLeft:store.state.app.tableSelect.marginLeft,
+            display:store.state.app.tableSelect.display,
             isSelectLoad:false,
             isClearLoad:false,
             isRefreshCacheLoad:false,
             tableLoading:true,
             editDialog: false,
             isSaveEdit: false,
-            total:0,
+            total:store.state.app.tableQuery.total,
+            pageSizes:store.state.app.tableQuery.pageSizes,
             query:{
-                page:1,
-                perPage:15,
+                page:store.state.app.tableQuery.page,
+                perPage:store.state.app.tableQuery.perPage,
                 name:'',
                 url:'',
                 serviceModule:'',
@@ -146,10 +148,10 @@ export default defineComponent({
         };
         //打开搜索栏
         const open = (value) =>{
-            form.leftSize = '15%';
-            form.rightSize = '85%';
-            form.display = 'hidden';
-            form.marginLeft = '5px';
+            form.leftSize = store.state.app.tableSelect.leftSize;
+            form.rightSize = store.state.app.tableSelect.rightSize;
+            form.marginLeft = store.state.app.tableSelect.marginLeft;
+            form.display = store.state.app.tableSelect.display;
             iconIsShow.value = value;
         };
         //关闭搜索栏
@@ -162,14 +164,14 @@ export default defineComponent({
         };
         //是否授予角色 格式化
         const isRolePermissionDescFormatter = (row) =>{
-            return formatterDictDesc(form.isRolePermission,row.isRole)
+            return dictUtils.formatterDictDesc(form.isRolePermission,row.isRole)
         };
         const isRolePermissionFormatter = (row) =>{
-            return formatterDictVal(form.isRolePermission,row.isRole)
+            return dictUtils.formatterDictVal(form.isRolePermission,row.isRole)
         };
         //服务名称格式化
         const serviceFormatter = (row) =>{
-            return formatterDictVal(form.serviceModule,row.serviceModule)
+            return dictUtils.formatterDictVal(form.serviceModule,row.serviceModule)
         };
         // 组件挂载到页面之后执行
         onMounted(() => {
@@ -179,7 +181,7 @@ export default defineComponent({
          * 列表数据查询
          */
         const selectDataList = () => {
-            store.dispatch('permission/selectPermissionList',form.query).then(res =>{
+            api.permission.selectPermissionList(form.query).then(res =>{
                 form.tableData = res.data.resultData;
                 form.query.page = res.data.currentPage;
                 form.total = res.data.totalCount;
@@ -206,8 +208,8 @@ export default defineComponent({
                 ruleForm.value.validate((valid) => {
                     if (valid) {
                         form.isSaveEdit = true;
-                        store.dispatch('permission/editPermission',form.update).then(res =>{
-                            sendNotification(res.msg,res.type,3000);
+                        api.permission.editPermission(form.update).then(res =>{
+                            toolUtils.sendNotification(res.msg,res.type,3000);
                             selectDataList();
                         }).finally(()=>{
                             form.editDialog = false;
@@ -224,8 +226,8 @@ export default defineComponent({
          */
         const handleRefreshCacheChange = () =>{
             form.isRefreshCacheLoad = true;
-            store.dispatch('permission/refreshCachePermission',form.query).then(res =>{
-                sendNotification(res.msg,res.type,3000);
+            api.permission.refreshCachePermission().then(res =>{
+                toolUtils.sendNotification(res.msg,res.type,3000);
             }).finally(()=>{
                 form.isRefreshCacheLoad = false;
             })

@@ -1,6 +1,6 @@
 import CryptoJs from 'crypto-js'
 import { systemKey } from '@/config'
-const isProd = process.env.NODE_ENV === 'production'
+const isProd = process.env.NODE_ENV === 'production';
 /**
  * 加密
  */

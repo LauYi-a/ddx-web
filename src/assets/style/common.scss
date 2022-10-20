@@ -179,6 +179,7 @@
     color: var(--system-page-color);
   }
 }
+
 //表格更多操作图标按钮
 .more-operation-icon{
   cursor: pointer;
@@ -288,4 +289,60 @@ a {
       }
     }
   }*/
+}
+
+//抽屉 弹出窗
+.drawer-box{
+  .el-drawer{
+    background: var(--system-page-background);
+  }
+  .el-drawer__header{
+    margin-bottom:20px;
+    color: var(--system-page-color);
+  }
+  .el-drawer__body{
+    height: calc(100vh);
+    overflow: auto;
+  }
+  .list-item{
+    color: var(--system-page-color);
+  }
+  .theme-box {
+    text-align: left;
+    padding-left: 20px;
+    height: calc(100% - 50px);
+    overflow: auto;
+    i {
+      cursor: pointer;
+      &:focus {
+        outline: none;
+      }
+    }
+    h3 {
+      margin-top: 40px;
+      margin-bottom: 20px;
+      color: var(--system-page-color);
+      font-size: 14px;
+      line-height: 22px;
+      text-align: left;
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+    //提示描述样式
+    .el-alert{
+      background-color: var(--system-container-background);
+      i{
+        margin-top: 5px;
+        font-size: 16px;
+      }
+    }
+  }
+  .theme-footer{
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-right: 10px;
+  }
 }

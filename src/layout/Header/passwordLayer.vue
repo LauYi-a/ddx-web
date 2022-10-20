@@ -19,10 +19,10 @@
 
 <script>
 import { defineComponent,computed, ref } from 'vue'
-import { sendNotification } from '@/utils/system/toolUtils'
+import toolUtils from '@/utils/system/toolUtils'
 import { useStore } from 'vuex'
 import Layer from '@/components/layer/index.vue'
-
+import api from '@/store/noCacheModules/index'
 export default defineComponent({
   components: {
     Layer
@@ -65,11 +65,11 @@ export default defineComponent({
               newPassword: form.value.newPassword,
               newPasswordYes: form.value.newPasswordYes
             };
-            store.dispatch('user/passwordChange',params).then(res => {
-                sendNotification(res.msg,res.type,3000);
+            api.user.passwordChange(params).then(res => {
+                toolUtils.sendNotification(res.msg,res.type,3000);
                 layerDom.value && layerDom.value.close()
                 setTimeout(() => {
-                    store.dispatch('user/loginOut')
+                    api.user.loginOut()
                 }, 2000)
             })
           } else {

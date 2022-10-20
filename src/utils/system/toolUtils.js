@@ -5,7 +5,7 @@ import {ElNotification} from 'element-plus'
  * @param data
  * @param id
  */
-export function arrayIdList(data,id) {
+function arrayIdList(data,id) {
     let arry = [];
     data.forEach(res => {
         arry.push(res[id])
@@ -17,7 +17,7 @@ export function arrayIdList(data,id) {
  * 校验表格多选框是否多选
  * @param multipleSelection
  */
-export function validationMultipleSelection(multipleSelection) {
+function validationMultipleSelection(multipleSelection) {
     if (multipleSelection.length>=1) {
         return true
     }
@@ -31,7 +31,7 @@ export function validationMultipleSelection(multipleSelection) {
  * @param type
  * @param time
  */
-export function sendNotification(msg,type,time){
+function sendNotification(msg,type,time){
     ElNotification({
         message: msg,
         type: type,
@@ -39,3 +39,11 @@ export function sendNotification(msg,type,time){
         duration: time
     });
 }
+
+const toolUtils = {
+    arrayIdList,
+    validationMultipleSelection,
+    sendNotification
+};
+
+export default toolUtils

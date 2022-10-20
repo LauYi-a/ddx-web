@@ -4,8 +4,8 @@
   </div>
   <div class="drawer-box">
     <el-drawer  title="系统参数设置"  v-model="drawer" size="330px" :show-close="false" direction="rtl">
-      <h3>参数设置</h3>
       <div class="theme-box">
+          <h3>参数设置</h3>
         <el-form  label-position="left"  :rules="rules" ref="ruleForm"  label-width="150px" :model="form.paramConfig"  style="max-width: 290px" >
             <el-space fill>
                 <el-alert :closable="false" type="info"  show-icon v-if="isShowDesc">密码输入错误{{form.paramConfig.lpec}}次后账号进行锁定</el-alert>
@@ -49,10 +49,12 @@
             </el-space>
         </el-form>
       </div>
-        <el-button type="primary" @click="submit" :loading="form.isLoad">确认</el-button>
-        <el-button @click="showDesc(true)" v-if="!isShowDesc">显示备注</el-button>
-        <el-button @click="showDesc(false)" v-if="isShowDesc">隐藏备注</el-button>
-        <el-button @click="close">取消</el-button>
+        <div class="theme-footer">
+            <el-button type="primary" @click="submit" :loading="form.isLoad">确认</el-button>
+            <el-button @click="showDesc(true)" v-if="!isShowDesc">显示备注</el-button>
+            <el-button @click="showDesc(false)" v-if="isShowDesc">隐藏备注</el-button>
+            <el-button @click="close">关 闭</el-button>
+        </div>
     </el-drawer>
   </div>
 </template>
@@ -60,7 +62,8 @@
 <script>
 import { defineComponent, ref,reactive } from 'vue'
 import { useStore } from 'vuex'
-import { sendNotification } from '@/utils/system/toolUtils'
+import toolUtils from '@/utils/system/toolUtils'
+import api from '@/store/noCacheModules/index'
 export default defineComponent({
   setup() {
       const store = useStore();
@@ -87,7 +90,7 @@ export default defineComponent({
       //打开弹窗查询系统参数配置
       const drawerChange = (value) => {
         drawer.value = value;
-        store.dispatch('paramConfig/getSysParamConfig').then(res =>{
+        api.paramConfig.getSysParamConfig().then(res =>{
           form.paramConfig = res.data;
         })
       };
@@ -104,8 +107,8 @@ export default defineComponent({
               ruleForm.value.validate((valid) => {
                   if (valid) {
                       form.isLoad = true;
-                      store.dispatch('paramConfig/updateParamConfig',form.paramConfig).then(res => {
-                          sendNotification(res.msg,res.type,3000);
+                      api.paramConfig.updateParamConfig(form.paramConfig).then(res => {
+                          toolUtils.sendNotification(res.msg,res.type,3000);
                       }).finally(()=>{
                           form.isLoad = false;
                       })
@@ -131,50 +134,5 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-  i {
-    cursor: pointer;
-    &:focus {
-      outline: none;
-    }
-  }
-  h3 {
-    margin-top: 40px;
-    margin-bottom: 20px;
-    color: var(--system-page-color);
-    font-size: 14px;
-    line-height: 22px;
-    text-align: left;
-    padding: 0 20px;
-    &:first-child {
-      margin-top: 0;
-    }
-  }
 
-  .theme-box {
-    text-align: left;
-    padding-left: 20px;
-    :deep() {
-        //提示描述样式
-        .el-alert{
-            background-color: var(--system-container-background);
-            i{
-                margin-top: 5px;
-                font-size: 16px;
-            }
-        }
-    }
-  }
-  .drawer-box{
-    :deep() {
-      .el-drawer{
-        background: var(--system-page-background);
-      }
-      .el-drawer__header{
-        color: var(--system-page-color);
-      }
-      .list-item{
-        color: var(--system-page-color);
-      }
-    }
-  }
 </style>

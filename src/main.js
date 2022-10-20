@@ -13,16 +13,16 @@ import store from './store'
 import router from './router'
 import dialogDrag  from './directive/drag/dialogDrag'
 import has from './directive/permission/has'
-const app = createApp(App)
+const app = createApp(App);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
-app.use(ElementPlus, { size: store.state.app.elementSize })
-app.use(store)
-app.use(ElNotification)
-app.use(router)
-app.use(has)
-app.use(dialogDrag)
-app.use(ElCollapseTransition)
-app.use(animated)
-app.mount('#app')
+app.use(ElementPlus, { size: store.state.app.elementSize });
+app.use(store);
+app.use(ElNotification);
+app.use(router);
+app.use(has);
+app.use(dialogDrag);
+app.use(ElCollapseTransition);
+app.use(animated);
+app.mount('#app');

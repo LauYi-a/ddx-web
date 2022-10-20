@@ -1,5 +1,4 @@
 import { getModulesAllGroupDictKeyValueApi } from '@/api/sys/dict'
-import { sendNotification } from '@/utils/system/toolUtils'
 const state = () => ({
   sysDict: '' // 系统字典
 });
@@ -33,7 +32,6 @@ const actions = {
         commit('sysDictChange', res.data);
         resolve(res)
       }).catch(error =>{
-        sendNotification(error.msg,error.type,3000);
         reject(error)
       })
     })

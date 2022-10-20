@@ -4,7 +4,7 @@
  * @param dictKeyVal 字典键值
  * @param value 格式化值
  */
-export function formatterDictVal(dictKeyVal,value){
+function formatterDictVal(dictKeyVal,value){
     let fmtValue = value;
     if(dictKeyVal){
         for (let index = 0; index < dictKeyVal.length; index++) {
@@ -23,7 +23,7 @@ export function formatterDictVal(dictKeyVal,value){
  * @param dictKeyVal 字典键值
  * @param value 格式化值
  */
-export function formatterDictDesc(dictKeyVal,value){
+function formatterDictDesc(dictKeyVal,value){
     let fmtValue = value;
     if(dictKeyVal){
         for (let index = 0; index < dictKeyVal.length; index++) {
@@ -36,3 +36,10 @@ export function formatterDictDesc(dictKeyVal,value){
     }
     return fmtValue
 }
+
+const dictUtils = {
+  formatterDictVal,
+  formatterDictDesc
+};
+
+export default dictUtils
