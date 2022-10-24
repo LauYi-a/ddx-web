@@ -12,6 +12,7 @@ import { changeTitle } from '@/utils/system/title'
 import Layout from '@/layout/index.vue'
 import MenuBox from '@/components/menu/index.vue'
 import { createNameComponent } from './createNode'
+import { menuType } from '@/utils/system/enumUtils'
 
 // 引入modules
 import System from './modules/system'
@@ -19,48 +20,52 @@ import System from './modules/system'
 let modules = [
   ...System
 ]
-const routes = modules
+const routes = modules;
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes
-})
+});
 
 // 动态路由的权限新增，供登录后调用
 export function addRoutes() {
-  let menus = JSON.parse(decrypt(localStorage.getItem("vuex"))).user.menus
-  eachData(menus)
+  let menus = JSON.parse(decrypt(localStorage.getItem("vuex"))).user.menus;
+  eachData(menus);
   menus.forEach(item => {
-    modules.push(item)
+    modules.push(item);
     router.addRoute(item)
    })
 }
 
 // 重置匹配所有路由的解决方案
 export function eachData(menus,lastPath) {
-  menus.forEach(d => {
-    if (d.children && d.children.length > 0) {
-      if (d.meta.resourceType === '0') {
-        d.component = Layout
+  menus.forEach(menu => {
+    //判断是否有子路由
+    if (menu.meta.resourceType !== menuType.MENU_TYPE_1) {
+      if (menu.component === 'Layout') {
+        menu.component = Layout
       } else {
-        d.component = createNameComponent(MenuBox)
+        menu.component = createNameComponent(MenuBox)
       }
-      if (d.children.length >=2){
-        lastPath = d.path
+      if (menu.children.length >=2){
+        lastPath = menu.path
       }
-      eachData(d.children,lastPath)
-    } else {
-      let url = lastPath ? lastPath+'/'+d.path+'/'+ d.component+'.vue':d.path+'/'+ d.component+'.vue';
-      d.component = createNameComponent(() => import(/* @vite-ignore */`../views/main${url}`))
+      eachData(menu.children,lastPath);
+      if (lastPath) {
+        lastPath = undefined
+      }
+    }else{
+      let url = lastPath ? lastPath+'/'+menu.path+'/'+ menu.component+'.vue': menu.path+'/'+ menu.component+'.vue';
+      menu.component = createNameComponent(() => import(/* @vite-ignore */`../views/main${url}`))
     }
-  })
+  });
 }
 
 if (store.state.user.token) {
   addRoutes()
 }
 
-const whiteList = ['/login']
+const whiteList = ['/login'];
 
 router.beforeEach((to, _from, next) => {
   NProgress.start();

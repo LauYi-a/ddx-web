@@ -346,3 +346,40 @@ a {
     margin-right: 10px;
   }
 }
+//json 编辑框
+.editor{
+  height: calc(90vh);
+  .json-editor-vue{
+    .jsoneditor {
+      border: thin solid var(--system-primary-color);
+      .jsoneditor-navigation-bar{
+        background: var(--system-container-background) !important;
+        border-bottom: thin solid var(--system-container-background);
+      }
+      .jsoneditor-menu{
+        background: var(--system-primary-color) !important;
+        border-bottom: thin solid var(--system-primary-color);
+        .jsoneditor-search{
+          .jsoneditor-frame{
+            z-index: 99999;
+            background: var(--system-container-background) !important;
+            input {
+              background: var(--system-container-background) !important;
+            }
+          }
+        }
+      }
+      .jsoneditor-outer{
+        .ace-jsoneditor{
+          .ace_gutter{
+            background: var(--system-container-background) !important;
+          }
+        }
+      }
+      .jsoneditor-statusbar{
+        background: var(--system-container-background) !important;
+        border-top: thin solid var(--system-container-background)
+      }
+    }
+  }
+}
