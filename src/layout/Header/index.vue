@@ -12,8 +12,8 @@
       <div class="function-list">
         <div class="function-list-item hidden-sm-and-down"><Full-screen /></div>
         <div class="function-list-item"><ServiceChange /></div>
-        <div class="function-list-item hidden-sm-and-down"><Theme /></div>
         <div class="function-list-item" v-if="isBut"><SystemSetting /></div>
+        <div class="function-list-item hidden-sm-and-down"><Theme /></div>
       </div>
       <!-- 用户信息 -->
       <div class="user-info" title="用户信息">

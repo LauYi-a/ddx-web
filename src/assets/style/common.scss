@@ -361,7 +361,7 @@ a {
         border-bottom: thin solid var(--system-primary-color);
         .jsoneditor-search{
           .jsoneditor-frame{
-            z-index: 99999;
+            z-index: 999;
             background: var(--system-container-background) !important;
             input {
               background: var(--system-container-background) !important;

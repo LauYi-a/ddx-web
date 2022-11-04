@@ -1,6 +1,6 @@
 <template>
   <div title="系统风格设置" @click="drawerChange(true)">
-      <el-icon  class="header-icon"><SetUp /></el-icon>
+      <el-icon  class="header-icon"><Grid /></el-icon>
   </div>
    <div class="drawer-box">
        <el-drawer
