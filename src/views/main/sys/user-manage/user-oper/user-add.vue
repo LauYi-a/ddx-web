@@ -2,7 +2,7 @@
     <div class="operation">
         <div class="operation-top">
             <div class="pager-header-right">
-                <div class="header-title-common">平台用户基本信息</div>
+                <div class="header-title-common">平台基本信息</div>
                 <div class="pager-header">
                     <el-page-header content="平台用户列表" @back="goBack" >
                         <template #icon>
