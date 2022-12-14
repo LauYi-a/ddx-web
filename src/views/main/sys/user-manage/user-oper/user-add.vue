@@ -76,7 +76,7 @@
         </div>
         <div class="affix-group-btns">
             <transition name="el-fade-in-linear">
-                <img :src="ok" title="保存平台用户信息" style="width: 40px;height: 40px;cursor: pointer" @click="submit" v-show="form.isLoad"/>
+                <img :src="ok" title="保存用户信息" style="width: 40px;height: 40px;cursor: pointer" @click="submit" v-show="form.isLoad"/>
             </transition>
         </div>
     </div>
