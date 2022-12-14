@@ -11,15 +11,16 @@
                                   @selection-change="handleSelectionChange"
                                   table-layout="auto" style="width: 100%" max-height="580">
                             <el-table-column type="selection" width="55" />
-                            <el-table-column prop="userId" label="用户ID"/>
-                            <el-table-column prop="username" label="用户账号"/>
-                            <el-table-column prop="nickname" label="用户名称"/>
-                            <el-table-column prop="mobile" label="手机号"/>
-                            <el-table-column prop="email" label="用户邮箱"/>
+                            <el-table-column prop="userId" label="用户ID" show-overflow-tooltip/>
+                            <el-table-column prop="username" label="用户账号" show-overflow-tooltip/>
+                            <el-table-column prop="nickname" label="用户名称" show-overflow-tooltip/>
+                            <el-table-column prop="mobile" label="手机号" show-overflow-tooltip/>
+                            <el-table-column prop="email" label="用户邮箱"  width="120" show-overflow-tooltip />
                             <el-table-column prop="gender" label="性别" :formatter="genderFormatter" width="60" />
                             <el-table-column prop="status" label="状态" :formatter="statusFormatter"  width="60" />
-                            <el-table-column prop="loginService" label="默认登入服务" :formatter="serviceFormatter" width="120" />
-                            <el-table-column prop="errorCount" label="登入错误次数" width="100" />
+                            <el-table-column prop="authorizationType" label="认证类型 " :formatter="authorizationTypeFormatter"  width="100" />
+                            <el-table-column prop="loginService" label="登入服务" :formatter="serviceFormatter" width="100" show-overflow-tooltip />
+                            <el-table-column prop="errorCount" label="登错次数" width="100" />
                             <el-table-column label="操作" fixed="right" width="80" >
                                 <template #default="scope">
                                     <el-dropdown trigger="click">
@@ -154,6 +155,10 @@ export default defineComponent({
         const statusFormatter = (row) =>{
             return dictUtils.formatterDictVal(store.state.dict.sysDict.sys.userStatus,row.status)
         };
+        //认证类型
+        const authorizationTypeFormatter = (row) =>{
+            return dictUtils.formatterDictVal(store.state.dict.sysDict.sys.authorizationType,row.authorizationType)
+        };
         //服务名称格式化
         const serviceFormatter = (row) =>{
             return dictUtils.formatterDictVal(store.state.dict.sysDict.all.serviceModulesName,row.loginService)
@@ -280,6 +285,7 @@ export default defineComponent({
             close,
             genderFormatter,
             statusFormatter,
+            authorizationTypeFormatter,
             serviceFormatter,
             handleSelectChange,
             handleSelectionChange,

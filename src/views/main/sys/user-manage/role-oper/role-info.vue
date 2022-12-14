@@ -32,11 +32,31 @@
                     <el-descriptions-item>
                         <template #label>
                             <div class="cell-item" >
-                                <el-icon><Flag /></el-icon>> &nbsp;角色状态
+                                <el-icon><Flag /></el-icon> &nbsp;角色状态
                             </div>
                         </template>
                         <span v-for="(item, key) in form.roleStatus" :key="key" >
                              {{item.key===form.role.status? item.value:''}}
+                        </span>
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                        <template #label>
+                            <div class="cell-item" >
+                                <el-icon><WindPower /></el-icon> &nbsp;角色类型
+                            </div>
+                        </template>
+                        <span v-for="(item, key) in form.roleType" :key="key" >
+                             {{item.key===form.role.roleType? item.value:''}}
+                        </span>
+                    </el-descriptions-item>
+                    <el-descriptions-item>
+                        <template #label>
+                            <div class="cell-item" >
+                                <el-icon><Finished /></el-icon> &nbsp;注册是否默认选择
+                            </div>
+                        </template>
+                        <span v-for="(item, key) in form.defaultSelect" :key="key" >
+                             {{item.key===form.role.defaultSelect? item.value:''}}
                         </span>
                     </el-descriptions-item>
                     <el-descriptions-item>
@@ -121,12 +141,16 @@ export default defineComponent({
                 name:initRoleInfo.name,
                 code:initRoleInfo.code,
                 status:initRoleInfo.status,
+                roleType:initRoleInfo.roleType,
+                defaultSelect:initRoleInfo.defaultSelect,
                 createTime:initRoleInfo.createTime,
                 updateTime:initRoleInfo.updateTime,
                 rolePermission:initRoleInfo.rolePermission || [],
                 rolePermission_copy:initRoleInfo.rolePermission || [],
             },
             roleStatus: store.state.dict.sysDict.sys.roleStatus,
+            roleType: store.state.dict.sysDict.sys.roleType,
+            defaultSelect: store.state.dict.sysDict.sys.defaultSelect,
             serviceModulesName: store.state.dict.sysDict.all.serviceModulesName,
             query:{
                 permissionKey:'',

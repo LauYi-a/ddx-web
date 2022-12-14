@@ -11,8 +11,10 @@
                                   @selection-change="handleSelectionChange"
                                   table-layout="auto" style="width: 100%" max-height="580">
                             <el-table-column type="selection" width="55" />
+                            <el-table-column prop="code" label="角色编号" show-overflow-tooltip/>
                             <el-table-column prop="name" label="角色名称"/>
-                            <el-table-column prop="code" label="角色编号"/>
+                            <el-table-column prop="roleType" label="角色类型" :formatter="roleTypeFormatter"/>
+                            <el-table-column prop="defaultSelect" label="注册是否默认选择" :formatter="defaultSelectFormatter"/>
                             <el-table-column prop="status" label="角色状态" :formatter="formatter"/>
                             <el-table-column prop="createTime" label="创建时间"/>
                             <el-table-column prop="updateTime" label="修改时间"/>
@@ -139,6 +141,14 @@ export default defineComponent({
         const formatter = (row) =>{
             return dictUtils.formatterDictVal(store.state.dict.sysDict.sys.roleStatus,row.status)
         };
+        //是否默认选择
+        const defaultSelectFormatter = (row) =>{
+            return dictUtils.formatterDictVal(store.state.dict.sysDict.sys.defaultSelect,row.defaultSelect)
+        };
+        //角色状态
+        const roleTypeFormatter = (row) =>{
+            return dictUtils.formatterDictVal(store.state.dict.sysDict.sys.roleType,row.roleType)
+        };
         //监听路由变化刷新列表
         watch(()=>router.currentRoute.value.query, (newValue) => {
             if(newValue.isAddOrEdit){
@@ -262,6 +272,8 @@ export default defineComponent({
             open,
             close,
             formatter,
+            defaultSelectFormatter,
+            roleTypeFormatter,
             handleSelectChange,
             handleSelectionChange,
             handleSizeChange,

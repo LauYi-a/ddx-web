@@ -15,13 +15,20 @@
                 <el-form  label-position="right"  :rules="rules" ref="ruleForm"  label-width="150px" :model="form.roleInfo">
                     <el-row>
                         <el-col :span="8">
-                            <el-form-item label="角色名称" prop="name">
+                            <el-form-item label="角色名称" prop="name"  title="角色显示名称">
                                 <el-input v-model="form.roleInfo.name" size="mini" placeholder="输入角色名称" clearable />
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="角色状态" prop="status">
-                                <el-select v-model="form.roleInfo.status" placeholder="选择角色状态" size="mini" clearable style="width: 100%;">
+                            <el-form-item label="注册是否默认选择" prop="defaultSelect" title="客户端注册用户时角色是否被默认选择">
+                                <el-select v-model="form.roleInfo.defaultSelect" placeholder="选择角色状态" size="mini" style="width: 100%;">
+                                    <el-option v-for="item in form.defaultSelect" :key="item.key"  :label="item.value" :value="item.key"  />
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="角色状态" prop="status" title="角色使用状态">
+                                <el-select v-model="form.roleInfo.status" placeholder="选择角色状态" size="mini" style="width: 100%;">
                                     <el-option v-for="item in form.roleStatus" :key="item.key"  :label="item.value" :value="item.key"  />
                                 </el-select>
                             </el-form-item>
@@ -58,7 +65,7 @@
                         <div class="cell-item">
                             <el-icon><Link /></el-icon>&nbsp;角色权限
                         </div><br>
-                        <el-checkbox  v-model="form.checkAllPermission" :indeterminate="form.isIndeterminate" @change="handleCheckAllPermissionChange">全选权限</el-checkbox>
+                        <el-checkbox title="将权限全部选中或全部取消选中" v-model="form.checkAllPermission" :indeterminate="form.isIndeterminate" @change="handleCheckAllPermissionChange">全选权限</el-checkbox>
                     </template>
                     <el-checkbox-group v-model="form.roleInfo.rolePermissionId">
                         <el-checkbox v-for="permission in form.permissions" :key="permission.id" :label="permission.id"  @change="handleCheckedPermissionChange">
@@ -71,7 +78,7 @@
                 </el-descriptions-item>
             </el-descriptions>
         </div>
-        <div class="affix-group-btns">
+        <div class="affix-group-btns" >
             <transition name="el-fade-in-linear">
                 <img :src="ok" title="保存用户信息" style="width: 40px;height: 40px;cursor: pointer" @click="submit" v-show="form.isLoad"/>
             </transition>
@@ -106,6 +113,7 @@ export default defineComponent({
                 id:initRoleInfo.id,
                 name:initRoleInfo.name,
                 status:initRoleInfo.status,
+                defaultSelect:initRoleInfo.defaultSelect,
                 rolePermissionId:initRoleInfo.rolePermission || [],
             },
             query:{
@@ -113,11 +121,13 @@ export default defineComponent({
                 serviceKey:store.state.user.services[0]
             },
             roleStatus: store.state.dict.sysDict.sys.roleStatus,
+            defaultSelect: store.state.dict.sysDict.sys.defaultSelect,
             serviceModulesName: store.state.dict.sysDict.all.serviceModulesName
         });
         const rules = {
             name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
             status: [{ required: true, message: '请选择状态', trigger: 'blur' }],
+            defaultSelect: [{ required: true, message: '请选择默认选项', trigger: 'blur' }],
         };
         //返回
         const goBack = () =>{
@@ -156,6 +166,10 @@ export default defineComponent({
                     if (valid) {
                         if(form.roleInfo.rolePermissionId.length === 0){
                             toolUtils.sendNotification('请选择权限后进行保存','warning',3000);
+                            return false;
+                        }
+                        if(form.roleInfo.defaultSelect.length === 0){
+                            toolUtils.sendNotification('请选择注册是否默认选择选项进行保存','warning',3000);
                             return false;
                         }
                         form.isLoad = false;
