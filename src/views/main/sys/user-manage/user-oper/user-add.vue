@@ -2,9 +2,9 @@
     <div class="operation">
         <div class="operation-top">
             <div class="pager-header-right">
-                <div class="header-title-common">用户基本信息</div>
+                <div class="header-title-common">平台用户基本信息</div>
                 <div class="pager-header">
-                    <el-page-header content="用户列表" @back="goBack" >
+                    <el-page-header content="平台用户列表" @back="goBack" >
                         <template #icon>
                             <el-icon><ArrowLeftBold /></el-icon>
                         </template>
@@ -76,7 +76,7 @@
         </div>
         <div class="affix-group-btns">
             <transition name="el-fade-in-linear">
-                <img :src="ok" title="保存用户信息" style="width: 40px;height: 40px;cursor: pointer" @click="submit" v-show="form.isLoad"/>
+                <img :src="ok" title="保存平台用户信息" style="width: 40px;height: 40px;cursor: pointer" @click="submit" v-show="form.isLoad"/>
             </transition>
         </div>
     </div>

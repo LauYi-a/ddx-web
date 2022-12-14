@@ -2,12 +2,12 @@
     <div class="full-body">
         <div class="flex-box">
             <div class="top-box">
-                <el-descriptions  class="margin-top" title="用户基本信息" :column="4" size="small"  border  >
+                <el-descriptions  class="margin-top" title="平台用户基本信息" :column="4" size="small"  border  >
                     <template #title>
-                        <span class="desc-extra-title">用户基本信息</span>
+                        <span class="desc-extra-title">平台用户基本信息</span>
                     </template>
                     <template #extra>
-                        <el-page-header content="用户列表" @back="goBack" >
+                        <el-page-header content="平台用户列表" @back="goBack" >
                             <template #icon>
                                 <el-icon><ArrowLeftBold /></el-icon>
                             </template>

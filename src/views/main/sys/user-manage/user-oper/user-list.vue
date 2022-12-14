@@ -79,10 +79,10 @@
                 </div>
             </div>
             <div class="table-body-bottom">
-                <el-button title="新增用户信息" type="primary" @click="handleToAddChange" v-has="'create'">新增</el-button>
+                <el-button title="新增平台用户信息" type="primary" @click="handleToAddChange" v-has="'create'">新增</el-button>
                 <el-popconfirm title="确定是否需要批量删除选择的数据？" confirm-button-text="确定" cancel-button-text="取消" @confirm="handleBatchDeleteChange">
                     <template #reference>
-                        <el-button title="批量删除用户" type="primary" :loading="form.isBatchDeleteLoad" v-has="'batch_delete'">批量删除</el-button>
+                        <el-button title="批量删除平台用户" type="primary" :loading="form.isBatchDeleteLoad" v-has="'batch_delete'">批量删除</el-button>
                     </template>
                 </el-popconfirm>
                 <img :src="closeImages" title="关闭搜索栏" @click="close(true)" v-if="!iconIsShow" style="width: 30px;height: 30px;cursor: pointer; margin-left: 8px" class="animate__animated animate__bounceIn"/>
