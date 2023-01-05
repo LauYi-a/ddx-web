@@ -47,6 +47,22 @@
                     </el-input>
                 </el-form-item>
             </el-space>
+            <el-space fill>
+                <el-alert :closable="false" type="info"  show-icon  v-if="isShowDesc">网关令牌过期时间{{form.paramConfig.gatewayTokenExpireTime}}秒</el-alert>
+                <el-form-item label="网关令牌过期时间" prop="gatewayTokenExpireTime" size="mini" placeholder="输入网关令牌过期时间" clearable>
+                    <el-input v-model="form.paramConfig.gatewayTokenExpireTime">
+                        <template #append>秒</template>
+                    </el-input>
+                </el-form-item>
+            </el-space>
+            <el-space fill>
+                <el-alert :closable="false" type="info"  show-icon  v-if="isShowDesc">验证码过期时间{{form.paramConfig.verificationCodeExpireTime}}秒</el-alert>
+                <el-form-item label="验证码过期时间" prop="verificationCodeExpireTime" size="mini" placeholder="输入验证码过期时间" clearable>
+                    <el-input v-model="form.paramConfig.verificationCodeExpireTime">
+                        <template #append>秒</template>
+                    </el-input>
+                </el-form-item>
+            </el-space>
         </el-form>
       </div>
         <div class="theme-footer">
@@ -76,7 +92,9 @@ export default defineComponent({
             accountLockTime:'',
             accessTokenTime:'',
             refreshTokenTime:'',
-            sysRequestTime:''
+            sysRequestTime:'',
+            gatewayTokenExpireTime:'',
+            verificationCodeExpireTime:'',
          },
          isLoad:false
       });
@@ -86,6 +104,8 @@ export default defineComponent({
           accessTokenTime: [{ required: true, message: '请输入TOKEN有效时间', trigger: 'blur' }],
           refreshTokenTime: [{ required: true, message: '请输入TOKEN刷新时间', trigger: 'blur' }],
           sysRequestTime: [{ required: true, message: '请输入HTTP请求间隔时间', trigger: 'blur' }],
+          gatewayTokenExpireTime: [{ required: true, message: '输入网关令牌过期时间', trigger: 'blur' }],
+          verificationCodeExpireTime: [{ required: true, message: '输入验证码过期时间', trigger: 'blur' }],
       };
       //打开弹窗查询系统参数配置
       const drawerChange = (value) => {
