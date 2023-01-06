@@ -159,7 +159,7 @@ export default defineComponent({
                 if (e.id === val){
                     form.whitelistInfo={
                         name:e.name,
-                        url:e.url.replace('POST:',''),
+                        url:e.url,
                         type:form.whitelistInfo.type,
                         serviceModule:e.serviceModule
                     }

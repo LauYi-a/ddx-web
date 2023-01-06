@@ -16,7 +16,7 @@
                 </el-form-item>
             </el-space>
             <el-space fill>
-                <el-alert :closable="false" type="info"  show-icon  v-if="isShowDesc">输入密码错误{{form.paramConfig.lpec}}次账号锁定等待解锁时间</el-alert>
+                <el-alert :closable="false" type="info"  show-icon  v-if="isShowDesc">密码错误{{form.paramConfig.lpec}}次锁定账号等待{{form.paramConfig.accountLockTime}}秒后解锁</el-alert>
                 <el-form-item label="密码错误锁定时间" prop="accountLockTime" size="mini" placeholder="输入密码错误锁定时间" clearable>
                     <el-input v-model="form.paramConfig.accountLockTime">
                         <template #append>秒</template>
@@ -32,7 +32,7 @@
                 </el-form-item>
             </el-space>
             <el-space fill>
-                <el-alert :closable="false" type="info"  show-icon  v-if="isShowDesc">每隔多少天刷新服务器所有TOKEN</el-alert>
+                <el-alert :closable="false" type="info"  show-icon  v-if="isShowDesc">每隔{{form.paramConfig.refreshTokenTime}}天刷新服务器所有TOKEN</el-alert>
                 <el-form-item label="刷新TOKEN时间" prop="refreshTokenTime" size="mini" placeholder="输入刷新TOKEN时间" clearable>
                     <el-input v-model="form.paramConfig.refreshTokenTime">
                         <template #append>天</template>
@@ -40,7 +40,7 @@
                 </el-form-item>
             </el-space>
             <el-space fill>
-                <el-alert :closable="false" type="info"  show-icon  v-if="isShowDesc">每次请求同一接口间隔时间不能大于{{form.paramConfig.sysRequestTime}}秒</el-alert>
+                <el-alert :closable="false" type="info"  show-icon  v-if="isShowDesc">每次请求同一接口间隔时间不能小于{{form.paramConfig.sysRequestTime}}秒</el-alert>
                 <el-form-item label="HTTP请求间隔时间" prop="sysRequestTime" size="mini" placeholder="输入HTTP请求间隔时间" clearable>
                     <el-input v-model="form.paramConfig.sysRequestTime">
                         <template #append>秒</template>
@@ -48,7 +48,7 @@
                 </el-form-item>
             </el-space>
             <el-space fill>
-                <el-alert :closable="false" type="info"  show-icon  v-if="isShowDesc">网关令牌过期时间{{form.paramConfig.gatewayTokenExpireTime}}秒</el-alert>
+                <el-alert :closable="false" type="info"  show-icon  v-if="isShowDesc">网关发放请求令牌{{form.paramConfig.gatewayTokenExpireTime}}秒后过期</el-alert>
                 <el-form-item label="网关令牌过期时间" prop="gatewayTokenExpireTime" size="mini" placeholder="输入网关令牌过期时间" clearable>
                     <el-input v-model="form.paramConfig.gatewayTokenExpireTime">
                         <template #append>秒</template>
