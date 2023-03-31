@@ -11,11 +11,12 @@
                                   @selection-change="handleSelectionChange"
                                   table-layout="auto" style="width: 100%" max-height="580">
                             <el-table-column type="selection" width="55" />
-                            <el-table-column prop="code" label="角色编号" show-overflow-tooltip/>
-                            <el-table-column prop="name" label="角色名称"/>
-                            <el-table-column prop="roleType" label="角色类型" :formatter="roleTypeFormatter"/>
-                            <el-table-column prop="defaultSelect" label="注册是否默认选择" :formatter="defaultSelectFormatter"/>
-                            <el-table-column prop="status" label="角色状态" :formatter="formatter"/>
+                            <el-table-column prop="code" label="角色编号" width="100" show-overflow-tooltip/>
+                            <el-table-column prop="name" label="角色名称" width="120" show-overflow-tooltip/>
+                            <el-table-column prop="status" label="角色状态" width="90" :formatter="formatter"/>
+                            <el-table-column prop="roleType" label="角色类型" width="90" :formatter="roleTypeFormatter"/>
+                            <el-table-column prop="defaultSelect" label="客户端默认角色" width="120" :formatter="defaultSelectFormatter"/>
+                            <el-table-column prop="roleType" label="角色简述" show-overflow-tooltip :formatter="roleTypeDescFormatter"/>
                             <el-table-column prop="createTime" label="创建时间"/>
                             <el-table-column prop="updateTime" label="修改时间"/>
                             <el-table-column label="操作" fixed="right" width="80" >
@@ -61,8 +62,18 @@
                                 <el-input v-model="form.query.code" size="mini" placeholder="请输入角色编号"  clearable />
                             </el-form-item>
                             <el-form-item label="角色状态">
-                                <el-select v-model="form.query.status" placeholder="选择角色状态" size="mini" clearable style="width: 100%;">
-                                    <el-option v-for="item in form.roleStatus" :key="item.key"  :label="item.value" :value="item.key"  />
+                              <el-select v-model="form.query.status" placeholder="选择角色状态" size="mini" clearable style="width: 100%;">
+                                <el-option v-for="item in form.roleStatus" :key="item.key"  :label="item.value" :value="item.key"  />
+                              </el-select>
+                            </el-form-item>
+                            <el-form-item label="角色类型">
+                              <el-select v-model="form.query.roleType" placeholder="请选择角色类型" size="mini" clearable style="width: 100%;">
+                                <el-option v-for="item in form.roleType" :key="item.key"  :label="item.value" :value="item.key"  />
+                              </el-select>
+                            </el-form-item>
+                            <el-form-item label="客户端默认角色">
+                                <el-select v-model="form.query.defaultSelect" placeholder="请选择客户端默认角色" size="mini" clearable style="width: 100%;">
+                                    <el-option v-for="item in form.defaultSelect" :key="item.key"  :label="item.value" :value="item.key"  />
                                 </el-select>
                             </el-form-item>
                         </el-form>
@@ -109,11 +120,15 @@ export default defineComponent({
             isClearLoad:false,
             tableLoading:true,
             roleStatus: store.state.dict.sysDict.sys.roleStatus,
+            defaultSelect: store.state.dict.sysDict.sys.defaultSelect,
+            roleType: store.state.dict.sysDict.sys.roleType,
             total:store.state.app.tableQuery.total,
             pageSizes:store.state.app.tableQuery.pageSizes,
             query:{
                 page:store.state.app.tableQuery.page,
                 perPage:store.state.app.tableQuery.perPage,
+                defaultSelect:'',
+                roleType:'',
                 name:'',
                 code:'',
                 status:''
@@ -148,6 +163,9 @@ export default defineComponent({
         //角色状态
         const roleTypeFormatter = (row) =>{
             return dictUtils.formatterDictVal(store.state.dict.sysDict.sys.roleType,row.roleType)
+        };
+        const roleTypeDescFormatter = (row) =>{
+            return dictUtils.formatterDictDesc(store.state.dict.sysDict.sys.roleType,row.roleType)
         };
         //监听路由变化刷新列表
         watch(()=>router.currentRoute.value.query, (newValue) => {
@@ -274,6 +292,7 @@ export default defineComponent({
             formatter,
             defaultSelectFormatter,
             roleTypeFormatter,
+            roleTypeDescFormatter,
             handleSelectChange,
             handleSelectionChange,
             handleSizeChange,

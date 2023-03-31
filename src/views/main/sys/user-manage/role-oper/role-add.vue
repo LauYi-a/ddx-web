@@ -20,13 +20,6 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="注册是否默认选择" prop="defaultSelect" title="客户端注册用户时角色是否被默认选择">
-                                <el-select v-model="form.roleInfo.defaultSelect" placeholder="选择角色状态" clearable size="mini" style="width: 100%;">
-                                    <el-option v-for="item in form.defaultSelect" :key="item.key"  :label="item.value" :value="item.key"  />
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
                             <el-form-item label="角色类型" prop="roleType" title="角色类型">
                                 <el-select v-model="form.roleInfo.roleType" placeholder="选择角色状态" size="mini" clearable style="width: 100%;">
                                     <el-option v-for="item in form.roleType" :key="item.key"  :label="item.value" :value="item.key"  />
@@ -109,7 +102,6 @@ export default defineComponent({
             roleInfo: {
                 name:"",
                 roleType:"",
-                defaultSelect:"",
                 rolePermissionId:[]
             },
             query:{
@@ -117,14 +109,12 @@ export default defineComponent({
                 serviceKey:store.state.user.services[0]
             },
             roleType: store.state.dict.sysDict.sys.roleType,
-            defaultSelect: store.state.dict.sysDict.sys.defaultSelect,
             serviceModulesName: store.state.dict.sysDict.all.serviceModulesName
 
         });
         const rules = {
             name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
             roleType: [{ required: true, message: '请选择角色类型', trigger: 'blur' }],
-            defaultSelect: [{ required: true, message: '请选择默认选项', trigger: 'blur' }],
         };
         //返回
         const goBack = () =>{

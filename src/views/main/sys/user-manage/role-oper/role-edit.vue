@@ -20,8 +20,8 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="注册是否默认选择" prop="defaultSelect" title="客户端注册用户时角色是否被默认选择">
-                                <el-select v-model="form.roleInfo.defaultSelect" placeholder="选择角色状态" size="mini" style="width: 100%;">
+                            <el-form-item label="客户端默认角色" prop="defaultSelect" title="客户端注册用户时角色是否被默认选择">
+                                <el-select v-model="form.roleInfo.defaultSelect" placeholder="选择客户端默认角色" size="mini" style="width: 100%;">
                                     <el-option v-for="item in form.defaultSelect" :key="item.key"  :label="item.value" :value="item.key"  />
                                 </el-select>
                             </el-form-item>

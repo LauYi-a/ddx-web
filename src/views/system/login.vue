@@ -135,28 +135,32 @@ export default defineComponent({
     height: 100vh;
     background: linear-gradient(to right,#909399,#020202);
     .box {
-      width: 500px;
+      width: 360px;
       position: absolute;
-      left: 50%;
+      left: 20%;
       top: 50%;
-      background: white;
+      background: #dcdfe621;
       border-radius: 8px;
       transform: translate(-50%, -50%);
-      height: 440px;
+      height: 380px;
       overflow: hidden;
       h1 {
-        margin-top: 80px;
-        text-align: center;
+        margin-top: 20px;
+        margin-left: 20px;
+        text-align: left;
+        color: #000000;
+        font-size: revert;
+        font-family: fangsong;
       }
       .form {
-        width: 80%;
-        margin: 50px auto 15px;
+        width: 85%;
+        margin: 40px auto 20px;
         .el-input {
-          margin-bottom: 20px;
+          margin-bottom: 25px;
         }
         .password-icon {
           cursor: pointer;
-          color: #409EFF;
+          color: #0a0a0a;
         }
       }
       .fixed-top-right {
@@ -182,7 +186,7 @@ export default defineComponent({
         margin-top: 0;
       }
       .form {
-        
+
       }
     }
   }

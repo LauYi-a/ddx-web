@@ -102,6 +102,7 @@ import { ElMessageBox } from 'element-plus'
 import { decrypt} from '@/utils/system/cryptoAES'
 import toolUtils from '@/utils/system/toolUtils'
 import ok from "@/assets/images/ok.ico"
+import api from '@/store/noCacheModules/index'
 export default defineComponent({
     setup() {
         const ruleForm = ref(null);
